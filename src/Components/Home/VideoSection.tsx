@@ -1,88 +1,175 @@
-import React, { useEffect, useRef } from "react";
-import BannerVideo from "../../Assets/metabridge-video.mp4"; // Verify this path
-import Lenis from "@studio-freight/lenis";
- 
-export default function VideoBanner() {
-  const videoRef = useRef(null);
-  const scrollFractionRef = useRef(0);
-  const rafRef = useRef(null);
-  const lenisRef = useRef(null);
- 
+import React, { useRef, useEffect, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import MetabridgeVideo from "../../Assets/metabridge-video.mp4";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const VideoScrollSection: React.FC = () => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  
+  const [scrollProgress, setScrollProgress] = useState(0);
+
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
- 
-    // Ensure video is ready before manipulating
-    video.pause();
-    video.currentTime = 0; // Start at beginning
- 
-    // Initialize Lenis
-    const lenis = new Lenis({
-      duration: 0.8,
-      easing: (t) => t, // Linear easing
-      smooth: true,
-    });
-    lenisRef.current = lenis;
- 
-    // Update scroll fraction based on Lenis scroll position
-    const updateScrollFraction = () => {
-      const scrollTop = lenis.scroll; // Use Lenis scroll position
-      const container = document.querySelector(".video-container");
-      const containerHeight = container?.scrollHeight - window.innerHeight || 1;
-      let scrollFraction = scrollTop / containerHeight;
-      scrollFraction = Math.min(Math.max(scrollFraction, 0), 1);
-      scrollFractionRef.current = scrollFraction;
-    };
- 
-    // Animation loop
-    const animate = () => {
-      const video = videoRef.current;
-      if (video && video.readyState >= 2 && video.duration) {
-        const targetTime = video.duration * scrollFractionRef.current;
-        video.currentTime += (targetTime - video.currentTime) * 0.1; // Adjusted lerp factor
+    if (!wrapperRef.current || !sectionRef.current || !videoRef.current) return;
+
+    const wrapper = wrapperRef.current;
+    const section = sectionRef.current;
+    const scrollDistance = window.innerHeight * 3;
+    
+    // Set wrapper height
+    gsap.set(wrapper, { height: scrollDistance });
+
+    // Create the main scroll trigger for pinning
+    const pinTrigger = ScrollTrigger.create({
+      trigger: wrapper,
+      start: "top top",
+      end: `+=${scrollDistance}`,
+      pin: section,
+      pinSpacing: true, // This ensures proper spacing
+      anticipatePin: 1,
+      onUpdate: (self) => {
+        setScrollProgress(self.progress);
+      },
+      onRefresh: () => {
+        gsap.set(wrapper, { height: scrollDistance });
       }
-      rafRef.current = requestAnimationFrame(animate);
-    };
- 
-    // Lenis RAF loop
-    const lenisRaf = (time) => {
-      lenis.raf(time);
-      requestAnimationFrame(lenisRaf);
-    };
- 
-    // Start video playback (handle autoplay policy)
-    video.play().catch((error) => {
-      console.error("Video playback failed:", error);
-      // Optionally show a play button for user interaction
     });
- 
-    // Add scroll listener and start animations
-    lenis.on("scroll", updateScrollFraction);
-    updateScrollFraction(); // Initial calculation
-    rafRef.current = requestAnimationFrame(animate);
-    requestAnimationFrame(lenisRaf);
- 
+
+    // Handle resize
+    const handleResize = () => {
+      const newScrollDistance = window.innerHeight * 3;
+      gsap.set(wrapper, { height: newScrollDistance });
+      
+      // Update the pin trigger
+      pinTrigger.vars.end = `+=${newScrollDistance}`;
+      pinTrigger.refresh();
+    };
+
+    window.addEventListener('resize', handleResize);
+
     // Cleanup
     return () => {
-      lenis.off("scroll", updateScrollFraction);
-      cancelAnimationFrame(rafRef.current);
-      lenis.destroy();
+      window.removeEventListener('resize', handleResize);
+      pinTrigger.kill();
     };
   }, []);
- 
+
+  // Handle video scrubbing based on scroll progress
+  useEffect(() => {
+    if (!videoRef.current || !wrapperRef.current) return;
+
+    const video = videoRef.current;
+    const wrapper = wrapperRef.current;
+    const scrollDistance = window.innerHeight * 3;
+
+    let stopTimeout: number | null = null;
+    let scrubTween: gsap.core.Tween | null = null;
+
+    const createScrubTween = () => {
+      scrubTween = gsap.fromTo(
+        video,
+        { currentTime: video.currentTime },
+        {
+          currentTime: video.duration,
+          ease: "none",
+          scrollTrigger: {
+            trigger: wrapper,
+            start: "top top",
+            end: `+=${scrollDistance}`,
+            scrub: 1,
+            anticipatePin: 1,
+            // Add smoothing to reduce jerkiness
+            onUpdate: (self) => {
+              // Ensure video doesn't jump at the end
+              if (self.progress >= 0.99) {
+                video.currentTime = video.duration;
+              }
+            }
+          },
+        }
+      );
+      ScrollTrigger.refresh();
+    };
+
+    const onLoaded = () => {
+      if (!video.duration) return;
+
+      video.currentTime = 0;
+      const playPromise = video.play();
+      if (playPromise && typeof playPromise.then === "function") {
+        playPromise.catch(() => {
+          // ignore autoplay rejection
+        });
+      }
+
+      stopTimeout = window.setTimeout(() => {
+        video.pause();
+        video.currentTime = Math.min(1, video.duration);
+        createScrubTween();
+      }, 1000);
+    };
+
+    video.addEventListener("loadedmetadata", onLoaded);
+    if (video.readyState >= 1) onLoaded();
+
+    return () => {
+      video.removeEventListener("loadedmetadata", onLoaded);
+      if (stopTimeout) {
+        window.clearTimeout(stopTimeout);
+        stopTimeout = null;
+      }
+      if (scrubTween) {
+        scrubTween.kill();
+        scrubTween = null;
+      }
+    };
+  }, []);
+
   return (
-    <div className="video-container" style={{ height: "4000px" }}>
-      <video
-        ref={videoRef}
-        style={{ position: "sticky", top: 0, width: "100%", display: "block" }}
-        muted
-        playsInline
-        preload="auto"
-        aria-label="Scroll-driven video animation"
-      >
-        <source src={BannerVideo} type="video/mp4" />
-        <p>Your browser does not support the video tag.</p>
-      </video>
+    <div className="relative">
+      {/* Video Scroll Container */}
+      <div ref={wrapperRef} className="relative">
+        <section
+          ref={sectionRef}
+          className="w-full h-screen overflow-hidden"
+          style={{ zIndex: 10 }}
+        >
+          <video
+            ref={videoRef}
+            className="absolute top-0 left-0 w-full h-full object-cover"
+            src={MetabridgeVideo}
+            playsInline
+            preload="auto"
+            muted
+          />
+          
+          {/* Video Content Overlay */}
+          <div 
+            className="absolute inset-0 flex items-center justify-center transition-opacity duration-500"
+            style={{
+              opacity: scrollProgress < 0.6 ? 1 : 1 - ((scrollProgress - 0.6) / 0.4)
+            }}
+          >
+            <h1 className="text-white text-4xl md:text-6xl font-bold drop-shadow-lg text-center">
+              Your Text Here
+            </h1>
+          </div>
+
+          {/* Fade to Next Section Overlay */}
+          <div 
+            className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0b1016] to-[#0b1016] transition-opacity duration-500"
+            style={{
+              opacity: scrollProgress > 0.7 ? (scrollProgress - 0.7) / 0.3 : 0
+            }}
+          />
+          
+        </section>
+      </div>
     </div>
   );
-} 
+};
+
+export default VideoScrollSection;
