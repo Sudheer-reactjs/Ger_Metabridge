@@ -22,15 +22,14 @@ const VideoScrollSection: React.FC = () => {
     // Set wrapper height
     gsap.set(wrapper, { height: scrollDistance });
 
-    // Create the main scroll trigger for pinning with unique ID
+    // Create the main scroll trigger for pinning
     const pinTrigger = ScrollTrigger.create({
       trigger: wrapper,
       start: "top top",
       end: `+=${scrollDistance}`,
       pin: section,
-      pinSpacing: true,
+      pinSpacing: true, // This ensures proper spacing
       anticipatePin: 1,
-      id: `video-pin-${Math.random().toString(36).substr(2, 9)}`, // Unique ID
       onUpdate: (self) => {
         setScrollProgress(self.progress);
       },
@@ -80,16 +79,10 @@ const VideoScrollSection: React.FC = () => {
             trigger: wrapper,
             start: "top top",
             end: `+=${scrollDistance}`,
-            scrub: 0.5, // Reduced scrub for smoother playback
+            scrub: 1,
             anticipatePin: 1,
-            id: `video-scrub-${Math.random().toString(36).substr(2, 9)}`,
+            // Add smoothing to reduce jerkiness
             onUpdate: (self) => {
-              // More precise video time control
-              const targetTime = self.progress * video.duration;
-              if (Math.abs(video.currentTime - targetTime) > 0.1) {
-                video.currentTime = targetTime;
-              }
-              
               // Ensure video doesn't jump at the end
               if (self.progress >= 0.99) {
                 video.currentTime = video.duration;
@@ -104,37 +97,19 @@ const VideoScrollSection: React.FC = () => {
     const onLoaded = () => {
       if (!video.duration) return;
 
-      // Wait for video to be fully ready for smooth scrubbing
-      if (video.readyState < 3) { // HAVE_FUTURE_DATA or higher
-        video.addEventListener('canplaythrough', onLoaded, { once: true });
-        return;
+      video.currentTime = 0;
+      const playPromise = video.play();
+      if (playPromise && typeof playPromise.then === "function") {
+        playPromise.catch(() => {
+          // ignore autoplay rejection
+        });
       }
 
-      // Ensure video is ready for smooth scrubbing
-      video.currentTime = 0;
-      
-      // Load a few frames ahead for smoother scrubbing
-      video.addEventListener('seeked', () => {
-        const playPromise = video.play();
-        if (playPromise && typeof playPromise.then === "function") {
-          playPromise.catch(() => {
-            // ignore autoplay rejection
-          });
-        }
-
-        stopTimeout = window.setTimeout(() => {
-          video.pause();
-          video.currentTime = Math.min(1, video.duration);
-          
-          // Wait a bit more for the video to be fully ready
-          setTimeout(() => {
-            createScrubTween();
-          }, 200);
-        }, 1000);
-      }, { once: true });
-      
-      // Start the process
-      video.currentTime = 0.1; // This will trigger 'seeked'
+      stopTimeout = window.setTimeout(() => {
+        video.pause();
+        video.currentTime = Math.min(1, video.duration);
+        createScrubTween();
+      }, 1000);
     };
 
     video.addEventListener("loadedmetadata", onLoaded);
@@ -167,10 +142,8 @@ const VideoScrollSection: React.FC = () => {
             className="absolute top-0 left-0 w-full h-full object-cover"
             src={MetabridgeVideo}
             playsInline
-            preload="metadata" // Changed from "auto" for better compatibility
+            preload="auto"
             muted
-            crossOrigin="anonymous" // Helps with some video loading issues
-            style={{ willChange: 'transform' }} // Optimize for animations
           />
           
           {/* Video Content Overlay */}
@@ -187,7 +160,7 @@ const VideoScrollSection: React.FC = () => {
 
           {/* Fade to Next Section Overlay */}
           <div 
-            className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black transition-opacity duration-500"
+            className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white transition-opacity duration-500"
             style={{
               opacity: scrollProgress > 0.7 ? (scrollProgress - 0.7) / 0.3 : 0
             }}

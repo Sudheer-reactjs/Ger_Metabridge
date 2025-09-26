@@ -1,8 +1,10 @@
+// import LenisVideoAnimation from "../Components/Home/LenisVideoAnimation";
 import VideoSection from "../Components/Home/VideoSection";
 
 const Home = () => {
     return (
         <>
+        {/* <LenisVideoAnimation /> */}
           <VideoSection />
                 {/* Additional Content */}
       <section className="bg-gray-50 py-16">
