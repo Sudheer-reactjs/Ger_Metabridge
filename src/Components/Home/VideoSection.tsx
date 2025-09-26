@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import MetabridgeVideo from "../../Assets/metabridge-video.mp4";
+import MetabridgeVideo from "../../Assets/output-1.mp4";
 
 gsap.registerPlugin(ScrollTrigger);
 
