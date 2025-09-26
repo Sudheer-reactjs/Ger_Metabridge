@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import MetabridgeVideo from "../../Assets/metabridge-video.mp4";
+import MetabridgeVideo from "../../Assets/output-1.mp4";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -75,36 +75,74 @@ const VideoScrollSection: React.FC = () => {
   }, []);
 
   // Handle video scrubbing based on scroll progress
- useEffect(() => {
-  if (!videoRef.current) return;
+useEffect(() => {
+  if (!videoRef.current || !wrapperRef.current) return;
 
   const video = videoRef.current;
+  const wrapper = wrapperRef.current;
+  const scrollDistance = window.innerHeight * 3;
+
+  let stopTimeout: number | null = null;
+  let scrubTween: gsap.core.Tween | null = null;
+
+  const createScrubTween = () => {
+    // create tween that *starts* from currentTime (which we set to 1)
+    scrubTween = gsap.fromTo(
+      video,
+      { currentTime: video.currentTime },
+      {
+        currentTime: video.duration,
+        ease: "none",
+        scrollTrigger: {
+          trigger: wrapper,
+          start: "top top",
+          end: `+=${scrollDistance}`,
+          scrub: 1,
+          anticipatePin: 1,
+        },
+      }
+    );
+    // make sure ScrollTrigger calculations are up to date
+    ScrollTrigger.refresh();
+  };
 
   const onLoaded = () => {
     if (!video.duration) return;
 
-    gsap.to(video, {
-      currentTime: video.duration, // animate from 0 to full duration
-      ease: "none",
-      scrollTrigger: {
-        trigger: wrapperRef.current,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 1, // smooth scrubbing
-        anticipatePin: 1,
-      },
-    });
+    // 1) reset to start and play (muted should allow autoplay)
+    video.currentTime = 0;
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.then === "function") {
+      playPromise.catch(() => {
+        // ignore autoplay rejection (browser policies)
+      });
+    }
+
+    // 2) stop after 1 second, pause at exactly 1s, then create scrub tween
+    stopTimeout = window.setTimeout(() => {
+      video.pause();
+      video.currentTime = Math.min(1, video.duration); // ensure we don't exceed duration
+      createScrubTween();
+    }, 1000);
   };
 
-  // Wait for metadata so duration is available
   video.addEventListener("loadedmetadata", onLoaded);
+  // If metadata already loaded, run immediately
+  if (video.readyState >= 1) onLoaded();
 
   return () => {
     video.removeEventListener("loadedmetadata", onLoaded);
-    ScrollTrigger.getAll().forEach(t => t.kill());
+    if (stopTimeout) {
+      window.clearTimeout(stopTimeout);
+      stopTimeout = null;
+    }
+    if (scrubTween) {
+      // kill only this tween (and its ScrollTrigger)
+      scrubTween.kill();
+      scrubTween = null;
+    }
   };
 }, []);
-
 
 
   return (
