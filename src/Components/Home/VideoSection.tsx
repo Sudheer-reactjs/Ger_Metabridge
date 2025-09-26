@@ -18,7 +18,7 @@ export default function VideoBanner() {
  
     // Initialize Lenis
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 0.8,
       easing: (t) => t, // Linear easing
       smooth: true,
     });
