@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import MetabridgeVideo from "../../Assets/output-1.mp4";
+import MetabridgeVideo from "../../Assets/metabridge-video.mp4";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -160,7 +160,7 @@ const VideoScrollSection: React.FC = () => {
 
           {/* Fade to Next Section Overlay */}
           <div 
-            className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white transition-opacity duration-500"
+            className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0b1016] to-[#0b1016] transition-opacity duration-500"
             style={{
               opacity: scrollProgress > 0.7 ? (scrollProgress - 0.7) / 0.3 : 0
             }}

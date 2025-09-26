@@ -1,31 +1,18 @@
-// import LenisVideoAnimation from "../Components/Home/LenisVideoAnimation";
 import VideoSection from "../Components/Home/VideoSection";
 
 const Home = () => {
     return (
         <>
-        {/* <LenisVideoAnimation /> */}
           <VideoSection />
-                {/* Additional Content */}
-      <section className="bg-gray-50 py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-8">More Content Here</h2>
-            <p className="text-gray-600 text-lg">
-              Add your additional content sections here. The smooth transition from the video 
-              section ensures a professional user experience without jarring jumps.
-            </p>
-          </div>
-        </div>
-      </section>
+==
       {/* Next Section - Smooth Transition */}
-      <section className="relative z-20 bg-white min-h-screen">
+      <section className="relative z-20 bg-[#0b1016]   min-h-screen">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto text-center space-y-8">
-            <h2 className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight">
+            <h2 className="text-4xl md:text-6xl font-bold  leading-tight">
               Next Section Content
             </h2>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="text-xl  leading-relaxed">
               This section appears smoothly after the video scrubbing is complete. 
               The transition from the video section to this section is now smooth and seamless.
             </p>
