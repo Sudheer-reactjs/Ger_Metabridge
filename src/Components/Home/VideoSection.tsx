@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import MetabridgeVideo from "../../Assets/output-1.mp4";
+import MetabridgeVideo from "../../Assets/metabridge-video.mp4";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,14 +22,15 @@ const VideoScrollSection: React.FC = () => {
     // Set wrapper height
     gsap.set(wrapper, { height: scrollDistance });
 
-    // Create the main scroll trigger for pinning
+    // Create the main scroll trigger for pinning with unique ID
     const pinTrigger = ScrollTrigger.create({
       trigger: wrapper,
       start: "top top",
       end: `+=${scrollDistance}`,
       pin: section,
-      pinSpacing: true, // This ensures proper spacing
+      pinSpacing: true,
       anticipatePin: 1,
+      id: `video-pin-${Math.random().toString(36).substr(2, 9)}`, // Unique ID
       onUpdate: (self) => {
         setScrollProgress(self.progress);
       },
@@ -79,10 +80,16 @@ const VideoScrollSection: React.FC = () => {
             trigger: wrapper,
             start: "top top",
             end: `+=${scrollDistance}`,
-            scrub: 1,
+            scrub: 0.5, // Reduced scrub for smoother playback
             anticipatePin: 1,
-            // Add smoothing to reduce jerkiness
+            id: `video-scrub-${Math.random().toString(36).substr(2, 9)}`,
             onUpdate: (self) => {
+              // More precise video time control
+              const targetTime = self.progress * video.duration;
+              if (Math.abs(video.currentTime - targetTime) > 0.1) {
+                video.currentTime = targetTime;
+              }
+              
               // Ensure video doesn't jump at the end
               if (self.progress >= 0.99) {
                 video.currentTime = video.duration;
@@ -97,19 +104,37 @@ const VideoScrollSection: React.FC = () => {
     const onLoaded = () => {
       if (!video.duration) return;
 
-      video.currentTime = 0;
-      const playPromise = video.play();
-      if (playPromise && typeof playPromise.then === "function") {
-        playPromise.catch(() => {
-          // ignore autoplay rejection
-        });
+      // Wait for video to be fully ready for smooth scrubbing
+      if (video.readyState < 3) { // HAVE_FUTURE_DATA or higher
+        video.addEventListener('canplaythrough', onLoaded, { once: true });
+        return;
       }
 
-      stopTimeout = window.setTimeout(() => {
-        video.pause();
-        video.currentTime = Math.min(1, video.duration);
-        createScrubTween();
-      }, 1000);
+      // Ensure video is ready for smooth scrubbing
+      video.currentTime = 0;
+      
+      // Load a few frames ahead for smoother scrubbing
+      video.addEventListener('seeked', () => {
+        const playPromise = video.play();
+        if (playPromise && typeof playPromise.then === "function") {
+          playPromise.catch(() => {
+            // ignore autoplay rejection
+          });
+        }
+
+        stopTimeout = window.setTimeout(() => {
+          video.pause();
+          video.currentTime = Math.min(1, video.duration);
+          
+          // Wait a bit more for the video to be fully ready
+          setTimeout(() => {
+            createScrubTween();
+          }, 200);
+        }, 1000);
+      }, { once: true });
+      
+      // Start the process
+      video.currentTime = 0.1; // This will trigger 'seeked'
     };
 
     video.addEventListener("loadedmetadata", onLoaded);
@@ -142,15 +167,17 @@ const VideoScrollSection: React.FC = () => {
             className="absolute top-0 left-0 w-full h-full object-cover"
             src={MetabridgeVideo}
             playsInline
-            preload="auto"
+            preload="metadata" // Changed from "auto" for better compatibility
             muted
+            crossOrigin="anonymous" // Helps with some video loading issues
+            style={{ willChange: 'transform' }} // Optimize for animations
           />
           
           {/* Video Content Overlay */}
           <div 
             className="absolute inset-0 flex items-center justify-center transition-opacity duration-500"
             style={{
-              opacity: scrollProgress < 0.8 ? 1 : 1 - ((scrollProgress - 0.8) / 0.2)
+              opacity: scrollProgress < 0.6 ? 1 : 1 - ((scrollProgress - 0.6) / 0.4)
             }}
           >
             <h1 className="text-white text-4xl md:text-6xl font-bold drop-shadow-lg text-center">
