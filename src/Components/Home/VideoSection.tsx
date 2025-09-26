@@ -11,7 +11,6 @@ const VideoScrollSection: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [isPinned, setIsPinned] = useState(false);
 
   useEffect(() => {
     if (!wrapperRef.current || !sectionRef.current || !videoRef.current) return;
@@ -19,131 +18,115 @@ const VideoScrollSection: React.FC = () => {
     const wrapper = wrapperRef.current;
     const section = sectionRef.current;
     const scrollDistance = window.innerHeight * 3;
+    
+    // Set wrapper height
     gsap.set(wrapper, { height: scrollDistance });
 
-    const handleScroll = () => {
-      if (!wrapper || !section) return;
-
-      const wrapperRect = wrapper.getBoundingClientRect();
-      const wrapperHeight = wrapper.offsetHeight;
-      const windowHeight = window.innerHeight;
-
-      // Check if we should pin the section
-      const shouldPin = wrapperRect.top <= 0 && wrapperRect.bottom > windowHeight;
-      setIsPinned(shouldPin);
-
-      // Calculate scroll progress through the pinned section
-      let progress = 0;
-      if (wrapperRect.top <= 0) {
-        const scrolledDistance = -wrapperRect.top;
-        const totalScrollDistance = wrapperHeight - windowHeight;
-        progress = Math.max(0, Math.min(0.998, scrolledDistance / totalScrollDistance));
-      }
-
-      setScrollProgress(progress);
-    };
-
-    // Initial scroll trigger setup for pinning
-    const scrollTrigger = ScrollTrigger.create({
+    // Create the main scroll trigger for pinning
+    const pinTrigger = ScrollTrigger.create({
       trigger: wrapper,
       start: "top top",
       end: `+=${scrollDistance}`,
       pin: section,
+      pinSpacing: true, // This ensures proper spacing
       anticipatePin: 1,
+      onUpdate: (self) => {
+        setScrollProgress(self.progress);
+      },
       onRefresh: () => {
         gsap.set(wrapper, { height: scrollDistance });
       }
     });
 
-    // Add scroll event listener for video scrubbing
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', () => {
-      gsap.set(wrapper, { height: window.innerHeight * 3 });
-      scrollTrigger.refresh();
-      handleScroll();
-    });
+    // Handle resize
+    const handleResize = () => {
+      const newScrollDistance = window.innerHeight * 3;
+      gsap.set(wrapper, { height: newScrollDistance });
+      
+      // Update the pin trigger
+      pinTrigger.vars.end = `+=${newScrollDistance}`;
+      pinTrigger.refresh();
+    };
 
-    // Initial call
-    handleScroll();
+    window.addEventListener('resize', handleResize);
 
     // Cleanup
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
-      scrollTrigger.kill();
+      window.removeEventListener('resize', handleResize);
+      pinTrigger.kill();
     };
   }, []);
 
   // Handle video scrubbing based on scroll progress
-useEffect(() => {
-  if (!videoRef.current || !wrapperRef.current) return;
+  useEffect(() => {
+    if (!videoRef.current || !wrapperRef.current) return;
 
-  const video = videoRef.current;
-  const wrapper = wrapperRef.current;
-  const scrollDistance = window.innerHeight * 3;
+    const video = videoRef.current;
+    const wrapper = wrapperRef.current;
+    const scrollDistance = window.innerHeight * 3;
 
-  let stopTimeout: number | null = null;
-  let scrubTween: gsap.core.Tween | null = null;
+    let stopTimeout: number | null = null;
+    let scrubTween: gsap.core.Tween | null = null;
 
-  const createScrubTween = () => {
-    // create tween that *starts* from currentTime (which we set to 1)
-    scrubTween = gsap.fromTo(
-      video,
-      { currentTime: video.currentTime },
-      {
-        currentTime: video.duration,
-        ease: "none",
-        scrollTrigger: {
-          trigger: wrapper,
-          start: "top top",
-          end: `+=${scrollDistance}`,
-          scrub: 1,
-          anticipatePin: 1,
-        },
+    const createScrubTween = () => {
+      scrubTween = gsap.fromTo(
+        video,
+        { currentTime: video.currentTime },
+        {
+          currentTime: video.duration,
+          ease: "none",
+          scrollTrigger: {
+            trigger: wrapper,
+            start: "top top",
+            end: `+=${scrollDistance}`,
+            scrub: 1,
+            anticipatePin: 1,
+            // Add smoothing to reduce jerkiness
+            onUpdate: (self) => {
+              // Ensure video doesn't jump at the end
+              if (self.progress >= 0.99) {
+                video.currentTime = video.duration;
+              }
+            }
+          },
+        }
+      );
+      ScrollTrigger.refresh();
+    };
+
+    const onLoaded = () => {
+      if (!video.duration) return;
+
+      video.currentTime = 0;
+      const playPromise = video.play();
+      if (playPromise && typeof playPromise.then === "function") {
+        playPromise.catch(() => {
+          // ignore autoplay rejection
+        });
       }
-    );
-    // make sure ScrollTrigger calculations are up to date
-    ScrollTrigger.refresh();
-  };
 
-  const onLoaded = () => {
-    if (!video.duration) return;
+      stopTimeout = window.setTimeout(() => {
+        video.pause();
+        video.currentTime = Math.min(1, video.duration);
+        createScrubTween();
+      }, 1000);
+    };
 
-    // 1) reset to start and play (muted should allow autoplay)
-    video.currentTime = 0;
-    const playPromise = video.play();
-    if (playPromise && typeof playPromise.then === "function") {
-      playPromise.catch(() => {
-        // ignore autoplay rejection (browser policies)
-      });
-    }
+    video.addEventListener("loadedmetadata", onLoaded);
+    if (video.readyState >= 1) onLoaded();
 
-    // 2) stop after 1 second, pause at exactly 1s, then create scrub tween
-    stopTimeout = window.setTimeout(() => {
-      video.pause();
-      video.currentTime = Math.min(1, video.duration); // ensure we don't exceed duration
-      createScrubTween();
-    }, 1000);
-  };
-
-  video.addEventListener("loadedmetadata", onLoaded);
-  // If metadata already loaded, run immediately
-  if (video.readyState >= 1) onLoaded();
-
-  return () => {
-    video.removeEventListener("loadedmetadata", onLoaded);
-    if (stopTimeout) {
-      window.clearTimeout(stopTimeout);
-      stopTimeout = null;
-    }
-    if (scrubTween) {
-      // kill only this tween (and its ScrollTrigger)
-      scrubTween.kill();
-      scrubTween = null;
-    }
-  };
-}, []);
-
+    return () => {
+      video.removeEventListener("loadedmetadata", onLoaded);
+      if (stopTimeout) {
+        window.clearTimeout(stopTimeout);
+        stopTimeout = null;
+      }
+      if (scrubTween) {
+        scrubTween.kill();
+        scrubTween = null;
+      }
+    };
+  }, []);
 
   return (
     <div className="relative">
@@ -151,9 +134,7 @@ useEffect(() => {
       <div ref={wrapperRef} className="relative">
         <section
           ref={sectionRef}
-          className={`w-full h-screen overflow-hidden transition-all duration-300 ${
-            isPinned ? 'fixed top-0 left-0' : 'absolute top-0 left-0'
-          }`}
+          className="w-full h-screen overflow-hidden"
           style={{ zIndex: 10 }}
         >
           <video
