@@ -13,68 +13,46 @@ export default function VideoScrubSection() {
 
     let targetTime = 0;
     let animationFrameId: number;
-    let ticking = false;
 
-    // Update targetTime based on scroll
+    // Light scroll handler: only sets targetTime
     const handleScroll = () => {
       if (!video.duration) return;
 
       const rect = container.getBoundingClientRect();
-      const containerHeight = container.offsetHeight;
-      const windowHeight = window.innerHeight;
-
-      const scrollStart = -rect.top;
-      const scrollRange = containerHeight - windowHeight;
-      const scrollProgress = Math.max(0, Math.min(1, scrollStart / scrollRange));
+      const scrollRange = container.offsetHeight - window.innerHeight;
+      const scrollProgress = Math.max(0, Math.min(1, -rect.top / scrollRange));
 
       targetTime = scrollProgress * video.duration;
-      ticking = false;
     };
 
-    // Smooth animation loop
     const animate = () => {
       if (video && video.duration) {
+        // Smooth lerp for Chrome + Safari
         const diff = targetTime - video.currentTime;
-        // Only update if difference is significant
-        if (Math.abs(diff) > 0.01) {
-          video.currentTime += diff * 0.2; // slightly faster lerp
-        }
+        video.currentTime += diff * 0.25; // higher factor for smoother feeling
       }
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    // Load video metadata
     const handleLoadedMetadata = () => {
       setIsVideoLoaded(true);
-      handleScroll(); // set initial frame
+      handleScroll();
     };
 
-    // iOS unlock trick
     const unlockVideo = () => {
-      video.play().then(() => {
-        video.pause();
-      }).catch(() => {});
+      video.play().then(() => video.pause()).catch(() => {});
       window.removeEventListener("touchstart", unlockVideo);
     };
     window.addEventListener("touchstart", unlockVideo);
 
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
+    window.addEventListener('scroll', handleScroll, { passive: true }); // passive for smooth scroll
 
-    // Use rAF to throttle scroll updates
-    const onScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(handleScroll);
-        ticking = true;
-      }
-    };
-    window.addEventListener('scroll', onScroll);
-
-    // Start animation
     animate();
 
     return () => {
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('touchstart', unlockVideo);
       cancelAnimationFrame(animationFrameId);
     };
@@ -84,7 +62,7 @@ export default function VideoScrubSection() {
     <div 
       ref={containerRef}
       className="relative"
-      style={{ height: '300vh' }}
+      style={{ height: '300vh', willChange: 'transform' }}
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
         <video
@@ -95,7 +73,6 @@ export default function VideoScrubSection() {
           playsInline
           src={MetabridgeVideo}
         />
-
         {!isVideoLoaded && (
           <div className="absolute inset-0 flex items-center justify-center bg-black">
             <div className="text-white text-xl">Loading video...</div>
