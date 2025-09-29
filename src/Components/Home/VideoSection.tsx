@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import MetabridgeVideo from "../../Assets/metabridge-video-new.mp4"
+import MetabridgeVideo from "../../Assets/metabridge-video-new.mp4";
 
 export default function VideoScrubSection() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -13,7 +13,9 @@ export default function VideoScrubSection() {
 
     let targetTime = 0;
     let animationFrameId: number;
+    let ticking = false;
 
+    // Update targetTime based on scroll
     const handleScroll = () => {
       if (!video.duration) return;
 
@@ -25,18 +27,23 @@ export default function VideoScrubSection() {
       const scrollRange = containerHeight - windowHeight;
       const scrollProgress = Math.max(0, Math.min(1, scrollStart / scrollRange));
 
-      // Only update targetTime here
       targetTime = scrollProgress * video.duration;
+      ticking = false;
     };
 
+    // Smooth animation loop
     const animate = () => {
       if (video && video.duration) {
-        // Smooth interpolation (lerp)
-        video.currentTime += (targetTime - video.currentTime) * 0.15;
+        const diff = targetTime - video.currentTime;
+        // Only update if difference is significant
+        if (Math.abs(diff) > 0.01) {
+          video.currentTime += diff * 0.2; // slightly faster lerp
+        }
       }
       animationFrameId = requestAnimationFrame(animate);
     };
 
+    // Load video metadata
     const handleLoadedMetadata = () => {
       setIsVideoLoaded(true);
       handleScroll(); // set initial frame
@@ -52,14 +59,22 @@ export default function VideoScrubSection() {
     window.addEventListener("touchstart", unlockVideo);
 
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    window.addEventListener('scroll', handleScroll);
 
-    // Start the smooth animation loop
+    // Use rAF to throttle scroll updates
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(handleScroll);
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', onScroll);
+
+    // Start animation
     animate();
 
     return () => {
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', onScroll);
       window.removeEventListener('touchstart', unlockVideo);
       cancelAnimationFrame(animationFrameId);
     };
