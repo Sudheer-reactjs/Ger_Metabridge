@@ -167,7 +167,7 @@ if (video.readyState >= 1) onLoaded();
 
           {/* Fade to Next Section Overlay */}
           <div 
-            className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0b1016] to-[#0b1016] transition-opacity duration-500"
+            className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white transition-opacity duration-500"
             style={{
               opacity: scrollProgress > 0.7 ? (scrollProgress - 0.7) / 0.3 : 0
             }}
