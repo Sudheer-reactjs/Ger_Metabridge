@@ -6,6 +6,26 @@ const Home = () => {
           <VideoSection />
 ==
       {/* Next Section - Smooth Transition */}
+              {/* Optional: Scroll indicator */}
+           {/* Next Section */}
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex items-center justify-center">
+        <div className="text-center text-white p-8">
+          <h2 className="text-4xl font-bold mb-4">Next Section</h2>
+          <p className="text-xl text-gray-300">
+            Your content continues here smoothly after the video
+          </p>
+        </div>
+      </div>
+
+      {/* Additional sections */}
+      <div className="min-h-screen bg-gradient-to-b from-gray-800 to-gray-700 flex items-center justify-center">
+        <div className="text-center text-white p-8">
+          <h2 className="text-4xl font-bold mb-4">More Content</h2>
+          <p className="text-xl text-gray-300">
+            Keep scrolling for more sections
+          </p>
+        </div>
+      </div>
       <section className="relative z-20 bg-[#0b1016]   min-h-screen">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto text-center space-y-8">
