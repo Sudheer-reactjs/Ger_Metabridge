@@ -94,26 +94,32 @@ const VideoScrollSection: React.FC = () => {
       ScrollTrigger.refresh();
     };
 
-    const onLoaded = () => {
-      if (!video.duration) return;
+const onLoaded = () => {
+  if (!video.duration || video.duration === Infinity) {
+    console.log("Video duration not ready:", video.duration);
+    return;
+  }
+  
+  console.log("Video loaded. Duration:", video.duration);
+  video.currentTime = 0;
+  
+  const playPromise = video.play();
+  if (playPromise && typeof playPromise.then === "function") {
+    playPromise.catch(() => {
+      // ignore autoplay rejection
+    });
+  }
+  
+  stopTimeout = window.setTimeout(() => {
+    video.pause();
+    video.currentTime = Math.min(1, video.duration);
+    createScrubTween();
+  }, 1000);
+};
 
-      video.currentTime = 0;
-      const playPromise = video.play();
-      if (playPromise && typeof playPromise.then === "function") {
-        playPromise.catch(() => {
-          // ignore autoplay rejection
-        });
-      }
-
-      stopTimeout = window.setTimeout(() => {
-        video.pause();
-        video.currentTime = Math.min(1, video.duration);
-        createScrubTween();
-      }, 1000);
-    };
-
-    video.addEventListener("loadedmetadata", onLoaded);
-    if (video.readyState >= 1) onLoaded();
+video.addEventListener("loadedmetadata", onLoaded);
+video.addEventListener("loadeddata", onLoaded); // Add this line
+if (video.readyState >= 1) onLoaded();
 
     return () => {
       video.removeEventListener("loadedmetadata", onLoaded);
@@ -137,14 +143,15 @@ const VideoScrollSection: React.FC = () => {
           className="w-full h-screen overflow-hidden"
           style={{ zIndex: 10 }}
         >
-          <video
-            ref={videoRef}
-            className="absolute top-0 left-0 w-full h-full object-cover"
-            src={MetabridgeVideo}
-            playsInline
-            preload="auto"
-            muted
-          />
+    <video
+  ref={videoRef}
+  className="absolute top-0 left-0 w-full h-full object-cover"
+  src={MetabridgeVideo}
+  playsInline
+  preload="metadata"
+  muted
+  crossOrigin="anonymous"
+/> 
           
           {/* Video Content Overlay */}
           <div 
