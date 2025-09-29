@@ -11,37 +11,38 @@ export default function VideoScrubSection() {
     const container = containerRef.current;
     if (!video || !container) return;
 
-    let targetTime = 0; // desired video time
-    let animationFrameId: number;
+    let ticking = false;
 
     const handleScroll = () => {
       if (!video.duration) return;
 
-      const rect = container.getBoundingClientRect();
-      const containerHeight = container.offsetHeight;
-      const windowHeight = window.innerHeight;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const rect = container.getBoundingClientRect();
+          const containerHeight = container.offsetHeight;
+          const windowHeight = window.innerHeight;
 
-      const scrollStart = -rect.top;
-      const scrollRange = containerHeight - windowHeight;
-      const scrollProgress = Math.max(0, Math.min(1, scrollStart / scrollRange));
+          // Calculate scroll progress
+          const scrollStart = -rect.top;
+          const scrollRange = containerHeight - windowHeight;
+          const scrollProgress = Math.max(0, Math.min(1, scrollStart / scrollRange));
 
-      targetTime = scrollProgress * video.duration;
-    };
+          // Update video time
+          const targetTime = scrollProgress * video.duration;
+          video.currentTime = targetTime;
 
-    const animate = () => {
-      if (video && video.duration) {
-        // Smoothly interpolate towards targetTime
-        video.currentTime += (targetTime - video.currentTime) * 0.1;
+          ticking = false;
+        });
+        ticking = true;
       }
-      animationFrameId = requestAnimationFrame(animate);
     };
 
     const handleLoadedMetadata = () => {
       setIsVideoLoaded(true);
-      handleScroll(); // set initial frame
+      handleScroll(); // Set initial frame
     };
 
-    // iOS unlock trick
+    // iOS unlock trick: requires a tap once to allow seeking
     const unlockVideo = () => {
       video.play().then(() => {
         video.pause();
@@ -53,14 +54,13 @@ export default function VideoScrubSection() {
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
     window.addEventListener('scroll', handleScroll);
 
-    // start smooth animation loop
-    animate();
+    // Initial call
+    handleScroll();
 
     return () => {
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('touchstart', unlockVideo);
-      cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
