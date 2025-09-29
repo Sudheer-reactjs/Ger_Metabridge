@@ -1,89 +1,49 @@
-import { useEffect, useRef, useState } from 'react';
-import MetabridgeVideo from "../Assets/metabridge-video-new.mp4"
+import VideoSection from "../Components/Home/VideoSection";
 
-export default function VideoScrubSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+const Home = () => {
+    return (
+        <>
+          <VideoSection />
 
-  useEffect(() => {
-    const video = videoRef.current;
-    const container = containerRef.current;
-    if (!video || !container) return;
-
-    let lastUpdate = 0;
-
-    const handleScroll = () => {
-      if (!video.duration) return;
-
-      const now = performance.now();
-      // throttle updates → only run every 100ms (~10fps)
-      if (now - lastUpdate < 100) return;
-      lastUpdate = now;
-
-      window.requestAnimationFrame(() => {
-        const rect = container.getBoundingClientRect();
-        const containerHeight = container.offsetHeight;
-        const windowHeight = window.innerHeight;
-
-        const scrollStart = -rect.top;
-        const scrollRange = containerHeight - windowHeight;
-        const scrollProgress = Math.max(0, Math.min(1, scrollStart / scrollRange));
-
-        const targetTime = scrollProgress * video.duration;
-        video.currentTime = targetTime;
-      });
-    };
-
-    const handleLoadedMetadata = () => {
-      setIsVideoLoaded(true);
-      handleScroll(); // initial frame
-    };
-
-    // iOS unlock trick: must play/pause once after a tap
-    const unlockVideo = () => {
-      video.play().then(() => {
-        video.pause();
-      }).catch(() => {});
-      window.removeEventListener("touchstart", unlockVideo);
-    };
-    window.addEventListener("touchstart", unlockVideo);
-
-    video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    window.addEventListener('scroll', handleScroll);
-
-    // initial call
-    handleScroll();
-
-    return () => {
-      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('touchstart', unlockVideo);
-    };
-  }, []);
-
-  return (
-    <div 
-      ref={containerRef}
-      className="relative"
-      style={{ height: '300vh' }}
-    >
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
-        <video
-          ref={videoRef}
-          className="w-full h-full object-cover"
-          preload="auto"
-          muted
-          playsInline
-          src={MetabridgeVideo}
-        />
-
-        {!isVideoLoaded && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black">
-            <div className="text-white text-xl">Loading video...</div>
+      {/* Next Section - Smooth Transition */}
+              {/* Optional: Scroll indicator */}
+        
+      <section className="relative z-20 bg-[#0b1016]   min-h-screen">
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-4xl mx-auto text-center space-y-8">
+            <h2 className="text-4xl md:text-6xl font-bold  leading-tight">
+              Next Section Content
+            </h2>
+            <p className="text-xl  leading-relaxed">
+              This section appears smoothly after the video scrubbing is complete. 
+              The transition from the video section to this section is now smooth and seamless.
+            </p>
+            
+            <div className="grid md:grid-cols-3 gap-8 mt-12">
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h3 className="text-xl font-semibold mb-4">Feature One</h3>
+                <p className="text-gray-600">Description of your first feature or service.</p>
+              </div>
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h3 className="text-xl font-semibold mb-4">Feature Two</h3>
+                <p className="text-gray-600">Description of your second feature or service.</p>
+              </div>
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h3 className="text-xl font-semibold mb-4">Feature Three</h3>
+                <p className="text-gray-600">Description of your third feature or service.</p>
+              </div>
+            </div>
+            
+            <div className="pt-8">
+              <button className="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition-colors duration-300">
+                Get Started
+              </button>
+            </div>
           </div>
-        )}
-      </div>
-    </div>
-  );
+        </div>
+      </section>
+        </>
+    );
 }
+
+export default Home;
