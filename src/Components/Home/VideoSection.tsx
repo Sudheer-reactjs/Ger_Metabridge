@@ -14,23 +14,29 @@ export default function VideoScrubSection() {
     let targetTime = 0;
     let animationFrameId: number;
 
-    // Light scroll handler: only sets targetTime
     const handleScroll = () => {
-      if (!video.duration) return;
-
       const rect = container.getBoundingClientRect();
       const scrollRange = container.offsetHeight - window.innerHeight;
       const scrollProgress = Math.max(0, Math.min(1, -rect.top / scrollRange));
-
       targetTime = scrollProgress * video.duration;
     };
 
     const animate = () => {
       if (video && video.duration) {
-        // Smooth lerp for Chrome + Safari
-        const diff = targetTime - video.currentTime;
-        video.currentTime += diff * 0.25; // higher factor for smoother feeling
+        let diff = targetTime - video.currentTime;
+
+        // Force minimum change for Chrome to register
+        if (Math.abs(diff) < 0.05) {
+          diff = diff < 0 ? -0.05 : 0.05;
+        }
+
+        video.currentTime = video.currentTime + diff * 0.2;
+
+        // Clamp to video duration
+        if (video.currentTime > video.duration) video.currentTime = video.duration;
+        if (video.currentTime < 0) video.currentTime = 0;
       }
+
       animationFrameId = requestAnimationFrame(animate);
     };
 
@@ -46,7 +52,7 @@ export default function VideoScrubSection() {
     window.addEventListener("touchstart", unlockVideo);
 
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    window.addEventListener('scroll', handleScroll, { passive: true }); // passive for smooth scroll
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     animate();
 
@@ -80,5 +86,5 @@ export default function VideoScrubSection() {
         )}
       </div>
     </div>
-  );
+  ); 
 }
