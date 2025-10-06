@@ -88,7 +88,7 @@ export default function VideoScrubSection() {
         <div className="self-stretch inline-flex flex-col justify-center items-center gap-5 absolute inset-0 pt-[77px] ">
           <div className="max-w-[900px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-14">
             <h6 className="self-stretch text-center justify-start text-[#7e878b] text-sm md:text-base font-normal uppercase mb-3 md:mb-5">[ Recognized as the best globally ]</h6>
-            <div className="self-stretch flex flex-col justify-start items-start gap-2">
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
               <h1 className="self-stretch text-center justify-start text-[#f1f5f8] text-[32px] md:text-[55px] font-medium  leading-[42px] md:leading-[74px]">Scale Without Disruption and Budget Constraints </h1>
               <p className="self-stretch text-center justify-start text-[#c0d5df] text-sm md:text-lg font-normal  leading-[24px] md:leading-[30px]">We provide you with reliable BM advertising accounts 100% certified Italian Official Meta partners with millionaire expenses behind them. Instant Top-Ups, no more blocks, no more limits: just profit.</p>
             </div>
