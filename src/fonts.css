@@ -1,45 +1,45 @@
 /* src/fonts.css */
 @font-face {
-  font-family: 'Glancyr-Regular';
-  src: url('./assets/fonts/Glancyr-Regular.otf') format('opentype');
+  font-family: 'glancyr-regular';
+  src: url('/fonts/Glancyr-Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Glancyr-Medium';
-  src: url('./assets/fonts/Glancyr-Medium.otf') format('opentype');
+  font-family: 'glancyr-medium';
+  src: url('/fonts/Glancyr-Medium.otf') format('opentype');
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Satoshi-Regular';
-  src: url('./assets/fonts/Satoshi-Regular.otf') format('opentype');
+  font-family: 'satoshi-regular';
+  src: url('/fonts/Satoshi-Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
 }
 @font-face {
-  font-family: 'Satoshi-Light';
-  src: url('./assets/fonts/Satoshi-Light.otf') format('opentype');
+  font-family: 'satoshi-light';
+  src: url('/fonts/Satoshi-Light.otf') format('opentype');
   font-weight: 300;
   font-style: normal;
 }
 
 /* Global styles */
 body {
-   font-family: 'Satoshi-Light';
+   font-family: 'satoshi-light';
    font-weight: 300;
 }
 
 h1, h2, h3, h4 {
-  font-family: 'Glancyr-Medium', sans-serif;
+  font-family: 'glancyr-medium', sans-serif;
 }
 
 h5, h6 {
-  font-family: 'Glancyr-Regular', sans-serif;
+  font-family: 'glancyr-regular', sans-serif;
 }
 .text-light{
-    font-family: 'Satoshi-Light';
+    font-family: 'satoshi-light';
     font-weight: 300;
 }
