@@ -1,7 +1,8 @@
 import Logo from "../Assets/logo.png"
+import ContactButton from "./ContactButton";
 const Header = () => {
     return (
-        <header className="fixed top-0 left-0 right-0 w-full z-50 py-3">
+       <header className="fixed top-0 left-0 right-0 w-full z-50 py-3 bg-[#d9d9d9]/10 backdrop-blur-md">
                 <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-14">
                     <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-8">
@@ -11,9 +12,7 @@ const Header = () => {
                         </div>
 
                         <div className="flex items-center space-x-4">
-                            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
-                                Get Started
-                            </button>
+                            <ContactButton />
                         </div>
 
                     </div>
