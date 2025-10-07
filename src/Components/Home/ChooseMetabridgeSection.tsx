@@ -36,7 +36,7 @@ const ChooseMetabridgeSection = () => {
                         animate={controls}
                         variants={{
                             hidden: { opacity: 0, x: -200, rotate: -5 },
-                            visible: { opacity: 1, x: 0, rotate: 0, transition: { type: "spring", stiffness: 100, damping: 15, duration: 1 } }
+                            visible: { opacity: 1, x: 0, rotate: 0, transition: { type: "spring", stiffness: 100, damping: 15, duration: 1, delay: 0.5 } }
                         }}
                     >
                         <h2 className="text-[#051420] text-[28px] md:text-[40px] capitalize">
@@ -57,7 +57,7 @@ const ChooseMetabridgeSection = () => {
                         animate={controls}
                         variants={{
                             hidden: { opacity: 0, x: 200, rotate: 5 },
-                            visible: { opacity: 1, x: 0, rotate: 0, transition: { type: "spring", stiffness: 100, damping: 15, duration: 1 } }
+                            visible: { opacity: 1, x: 0, rotate: 0, transition: { type: "spring", stiffness: 100, damping: 15, duration: 1, delay: 0.5 } }
                         }}
                     >
                         <img
