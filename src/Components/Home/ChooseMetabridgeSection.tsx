@@ -5,8 +5,6 @@ import ContactButton from "../ContactButton";
 
 const ChooseMetabridgeSection = () => {
     const ref = useRef(null);
-
-    // 👇 adds a small threshold to avoid constant toggling
     const isInView = useInView(ref, { once: false, amount: 0.3 });
     const controls = useAnimation();
 
@@ -14,7 +12,6 @@ const ChooseMetabridgeSection = () => {
         if (isInView) {
             controls.start("visible");
         } else {
-            // 👇 add a small delay before hiding to prevent flicker
             setTimeout(() => {
                 if (!isInView) controls.start("hidden");
             }, 300);
@@ -23,7 +20,7 @@ const ChooseMetabridgeSection = () => {
 
 
     return (
-        <div className="w-full overflow-hidden my-10 md:my-14">
+        <div className="w-full overflow-hidden my-12 md:my-24">
             <div className="max-w-[1250px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-14">
                 <motion.div className="relative bg-[#b2cad9] rounded-[32px] py-10 md:py-16 px-5 md:px-12 flex flex-col lg:flex-row lg:space-x-12 space-y-6 lg:space-y-0"
                     ref={ref}

@@ -8,7 +8,6 @@ const Home = () => {
       <VideoSection />
       <ChooseMetabridgeSection />
       <TabSection />
-      <TabSection />
     </>
   );
 }
