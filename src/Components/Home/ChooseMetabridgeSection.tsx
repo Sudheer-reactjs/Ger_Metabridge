@@ -5,30 +5,35 @@ import ContactButton from "../ContactButton";
 
 const ChooseMetabridgeSection = () => {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: false, margin: "-100px" });
+
+    // 👇 adds a small threshold to avoid constant toggling
+    const isInView = useInView(ref, { once: false, amount: 0.3 });
     const controls = useAnimation();
 
     useEffect(() => {
         if (isInView) {
             controls.start("visible");
         } else {
-            controls.start("hidden");
+            // 👇 add a small delay before hiding to prevent flicker
+            setTimeout(() => {
+                if (!isInView) controls.start("hidden");
+            }, 300);
         }
     }, [isInView, controls]);
 
+
     return (
-        <motion.div
-            className="w-full overflow-hidden my-10 md:my-32"
-            ref={ref}
-            initial="hidden"
-            animate={controls}
-            variants={{
-                hidden: { opacity: 0, y: 200 },
-                visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 14, duration: 0.8 } }
-            }}
-        >
+        <div className="w-full overflow-hidden py-10 md:py-14">
             <div className="max-w-[1250px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-14">
-                <div className="relative bg-[#b2cad9] rounded-[32px] py-10 md:py-16 px-5 md:px-12 flex flex-col lg:flex-row lg:space-x-12 space-y-6 lg:space-y-0">
+                <motion.div className="relative bg-[#b2cad9] rounded-[32px] py-10 md:py-16 px-5 md:px-12 flex flex-col lg:flex-row lg:space-x-12 space-y-6 lg:space-y-0"
+                    ref={ref}
+                    initial="hidden"
+                    animate={controls}
+                    variants={{
+                        hidden: { opacity: 0, y: 200 },
+                        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 14, duration: 0.8 } }
+                    }}
+                >
 
                     <motion.div
                         className="w-full lg:w-[40%]"
@@ -67,9 +72,9 @@ const ChooseMetabridgeSection = () => {
                         />
                     </motion.div>
 
-                </div>
+                </motion.div>
             </div>
-        </motion.div>
+        </div>
     );
 }
 
