@@ -23,7 +23,7 @@ const ChooseMetabridgeSection = () => {
 
 
     return (
-        <div className="w-full overflow-hidden py-10 md:py-14">
+        <div className="w-full overflow-hidden my-10 md:my-14">
             <div className="max-w-[1250px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-14">
                 <motion.div className="relative bg-[#b2cad9] rounded-[32px] py-10 md:py-16 px-5 md:px-12 flex flex-col lg:flex-row lg:space-x-12 space-y-6 lg:space-y-0"
                     ref={ref}
