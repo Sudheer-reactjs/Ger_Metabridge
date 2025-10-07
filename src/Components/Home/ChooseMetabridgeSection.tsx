@@ -18,7 +18,7 @@ const ChooseMetabridgeSection = () => {
 
     return (
         <motion.div
-            className="w-full py-10 md:py-16"
+            className="w-full py-10 md:py-16 overflow-hidden"
             ref={ref}
             initial="hidden"
             animate={controls}
