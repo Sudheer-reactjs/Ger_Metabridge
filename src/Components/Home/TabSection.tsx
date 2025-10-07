@@ -103,7 +103,7 @@ const TabSection = () => {
                             </div>
                         ))}
                     </div>
-                    <div className="bg-[#051420] rounded-[30px] p-[10px min-h-[500px]">
+                    <div className="bg-[#051420] rounded-[30px] p-[10px] min-h-[500px]">
                         {/* Tab Content */}
                         {activeTab === 0 && (
                             <motion.div
