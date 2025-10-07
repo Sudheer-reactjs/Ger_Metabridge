@@ -27,9 +27,13 @@ transition: all 0.7s ease;
   transform: translateX(24px); 
 }
 .button-hover:hover .icon {
-  transform: translateX(-102px); 
+  transform: translateX(-100px); 
 }
 .button-hover:hover .hover-bg {
   transform: translatey(-98px) rotate(180deg);
   transition: transform 1s ease; 
+}
+
+img{
+  max-width: 100%;
 }
