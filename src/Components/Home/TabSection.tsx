@@ -23,7 +23,7 @@ const TabSection = () => {
     const [activeTab, setActiveTab] = useState(0);
     const [progress, setProgress] = useState(0);
     const intervalRef = useRef<number | null>(null);
-    const autoSwitchInterval = 100000;
+    const autoSwitchInterval = 10000;
 
     const resetProgress = (tabIndex: number) => {
         setActiveTab(tabIndex);
