@@ -1,4 +1,5 @@
 import ChooseMetabridgeSection from "../Components/Home/ChooseMetabridgeSection";
+import TabSection from "../Components/Home/TabSection";
 import VideoSection from "../Components/Home/VideoSection";
 
 const Home = () => {
@@ -6,7 +7,8 @@ const Home = () => {
     <>
       <VideoSection />
       <ChooseMetabridgeSection />
-    
+      <TabSection />
+      <TabSection />
     </>
   );
 }

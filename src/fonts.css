@@ -12,7 +12,12 @@
   font-weight: 500;
   font-style: normal;
 }
-
+@font-face {
+  font-family: 'satoshi-bold';
+  src: url('/fonts/Satoshi-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
 @font-face {
   font-family: 'satoshi-regular';
   src: url('/fonts/Satoshi-Regular.otf') format('opentype');
@@ -28,7 +33,7 @@
 
 /* Global styles */
 body {
-   font-family: 'satoshi-light';
+   font-family: 'satoshi-light'; 
    font-weight: 300;
 }
 
@@ -46,4 +51,8 @@ h5, h6 {
 .satoshi-regular{
  font-family: 'satoshi-regular';
  font-weight: 400;
+}
+.satoshi-bold{ 
+  font-family: 'satoshi-bold';
+    font-weight: 700;
 }

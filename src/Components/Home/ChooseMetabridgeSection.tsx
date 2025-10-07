@@ -18,13 +18,13 @@ const ChooseMetabridgeSection = () => {
 
     return (
         <motion.div
-            className="w-full py-10 md:py-16 overflow-hidden"
+            className="w-full overflow-hidden my-10 md:my-32"
             ref={ref}
             initial="hidden"
             animate={controls}
             variants={{
                 hidden: { opacity: 0, y: 200 },
-                visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15, duration: 0.8 } }
+                visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 14, duration: 0.8 } }
             }}
         >
             <div className="max-w-[1250px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-14">
@@ -36,11 +36,11 @@ const ChooseMetabridgeSection = () => {
                         animate={controls}
                         variants={{
                             hidden: { opacity: 0, x: -200, rotate: -5 },
-                            visible: { opacity: 1, x: 0, rotate: 0, transition: { type: "spring", stiffness: 100, damping: 15, duration: 1, delay: 0.5 } }
+                            visible: { opacity: 1, x: 0, rotate: 0, transition: { type: "spring", stiffness: 100, damping: 14, duration: 1, delay: 0.5 } }
                         }}
                     >
                         <h2 className="text-[#051420] text-[28px] md:text-[40px] capitalize">
-                            Why waste time when you can leave right away? 
+                            Why waste time when you can leave right away?
                         </h2>
                         <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mt-4">
                             We know how much every hour lost with a blocked account or a ridiculous spending limit costs.
@@ -57,7 +57,7 @@ const ChooseMetabridgeSection = () => {
                         animate={controls}
                         variants={{
                             hidden: { opacity: 0, x: 200, rotate: 5 },
-                            visible: { opacity: 1, x: 0, rotate: 0, transition: { type: "spring", stiffness: 100, damping: 15, duration: 1, delay: 0.5 } }
+                            visible: { opacity: 1, x: 0, rotate: 0, transition: { type: "spring", stiffness: 100, damping: 14, duration: 1, delay: 0.5 } }
                         }}
                     >
                         <img
