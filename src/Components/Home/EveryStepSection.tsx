@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, useInView, useAnimation } from "framer-motion";
-import MetaEcosystem from "../../Assets/meta-ecosystem.png";
 
 const isIOS = typeof navigator !== 'undefined' && /iP(hone|ad|od)/.test(navigator.platform) || (typeof navigator !== 'undefined' && /Mac/.test(navigator.platform) && 'ontouchend' in document);
 
@@ -144,11 +143,19 @@ export default function PinnedScrollSection() {
                     WebkitTransform: `translateZ(0) scale(${boxScale})`
                   }}
                 >
-                  <img
-                            className="w-full max-w-2xl m-auto"
-                            src={MetaEcosystem}
-                            alt="Meta Ecosystem"
-                        />
+                  <div className="w-full h-full flex items-center justify-center p-3"
+                   style={{
+    WebkitFontSmoothing: 'antialiased',
+    transform: 'translateZ(0)',
+    backfaceVisibility: 'hidden',
+    WebkitBackfaceVisibility: 'hidden',
+  }}
+                  >
+                    <div className="text-gray-900 text-xs leading-tight text-center">
+                      <div className="glancyr-medium mb-1">Choose the Plan That </div>
+                      <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
+                    </div>
+                  </div>
                 </span>
 
                 <span>Step</span>
