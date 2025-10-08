@@ -1,10 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, useInView, useAnimation } from "framer-motion";
 
-// More precise Safari detection
-const isIOS = typeof navigator !== 'undefined' && /iP(hone|ad|od)/.test(navigator.platform);
-const isSafari = typeof navigator !== 'undefined' && /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent) && !/Chromium/.test(navigator.userAgent);
-const needsSafariFix = isIOS || isSafari;
+const isIOS = typeof navigator !== 'undefined' && /iP(hone|ad|od)/.test(navigator.platform) || (typeof navigator !== 'undefined' && /Mac/.test(navigator.platform) && 'ontouchend' in document);
 
 export default function PinnedScrollSection() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -66,10 +63,10 @@ export default function PinnedScrollSection() {
     };
   }, []);
 
-  // Easing functions
+  // Easing: slightly softer on iOS
   const easeOutQuad = (t: number) => 1 - (1 - t) * (1 - t);
   const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-  const ease = needsSafariFix ? easeOutQuad : easeOutCubic;
+  const ease = isIOS ? easeOutQuad : easeOutCubic;
 
   // Mobile-aware max scale to prevent giant bitmap on iPhone
   const maxScale = useMemo(() => {
@@ -81,20 +78,14 @@ export default function PinnedScrollSection() {
 
   // Derived values with gentler thresholds to avoid flicker
   const boxScale = 1 + (eased * maxScale);
-  const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.18));
-  const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.62) / 0.22) : 0;
+  const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.18)); // slightly longer fade
+  const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.62) / 0.22) : 0; // smoother ramp
   const titleOpacity = scrollProgress < 0.32 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.32) / 0.24));
   const bgWhite = scrollProgress > 0.72;
 
   // Debounced pointerEvents toggling to avoid rapid flip-flop
   const contentPointerEvents = contentOpacity > 0.05 ? 'auto' : 'none';
   const titlePointerEvents = titleOpacity > 0.05 ? 'auto' : 'none';
-
-  // Calculate dimensions for the box
-  const boxWidth = 160;
-  const boxHeight = 70;
-  const scaledWidth = boxWidth * boxScale;
-  const scaledHeight = boxHeight * boxScale;
 
   return (
     <div className="">
@@ -134,62 +125,31 @@ export default function PinnedScrollSection() {
                 <span className="block w-full"></span>
                 <span>Every</span>
 
-                {/* White Box Between Words - Different approach for Safari */}
-                {needsSafariFix ? (
-                  // Safari-specific approach using width/height instead of scale
-                  <span
-                    className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden flex items-center justify-center"
-                    style={{
-                      width: `${scaledWidth}px`,
-                      height: `${scaledHeight}px`,
-                      transition: 'width 0.3s ease-out, height 0.3s ease-out, opacity 0.3s ease-out',
-                      opacity: boxOpacity,
-                      willChange: 'width, height, opacity',
-                      WebkitBackfaceVisibility: 'hidden',
-                      backfaceVisibility: 'hidden'
-                    }}
-                  >
-                    <div 
-                      className="text-gray-900 text-xs leading-tight text-center"
-                      style={{
-                        width: `${boxWidth}px`,
-                        height: `${boxHeight}px`,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '12px',
-                        WebkitFontSmoothing: 'antialiased',
-                        MozOsxFontSmoothing: 'grayscale'
-                      }}
-                    >
-                      <div>
-                        <div className="glancyr-medium mb-1">Choose the Plan That </div>
-                        <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
-                      </div>
+                {/* White Box Between Words */}
+                <span
+                  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
+                  style={{
+                    width: '160px',
+                    height: '70px',
+                    transform: `scale(${boxScale})`,
+                    transformOrigin: 'center center',
+                    transition: isIOS
+                      ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
+                      : 'transform 0.15s ease-out, opacity 0.15s ease-out',
+                    opacity: boxOpacity,
+                    willChange: 'transform, opacity',
+                    WebkitBackfaceVisibility: 'hidden',
+                    backfaceVisibility: 'hidden',
+                    WebkitTransform: `translateZ(0) scale(${boxScale})`
+                  }}
+                >
+                  <div className="w-full h-full flex items-center justify-center p-3">
+                    <div className="text-gray-900 text-xs leading-tight text-center">
+                      <div className="glancyr-medium mb-1">Choose the Plan That </div>
+                      <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
                     </div>
-                  </span>
-                ) : (
-                  // Standard approach for other browsers
-                  <span
-                    className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
-                    style={{
-                      width: '160px',
-                      height: '70px',
-                      transform: `scale(${boxScale})`,
-                      transformOrigin: 'center center',
-                      transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
-                      opacity: boxOpacity,
-                      willChange: 'transform, opacity'
-                    }}
-                  >
-                    <div className="w-full h-full flex items-center justify-center p-3">
-                      <div className="text-gray-900 text-xs leading-tight text-center">
-                        <div className="glancyr-medium mb-1">Choose the Plan That </div>
-                        <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
-                      </div>
-                    </div>
-                  </span>
-                )}
+                  </div>
+                </span>
 
                 <span>Step</span>
               </h2>
@@ -300,4 +260,4 @@ export default function PinnedScrollSection() {
       </section>
     </div>
   );
-}
+} 
