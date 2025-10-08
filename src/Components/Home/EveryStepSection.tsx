@@ -8,7 +8,6 @@ export default function PinnedScrollSection() {
   const isInView = useInView(ref, { once: false, amount: 0.3 });
   const controls = useAnimation();
 
-  // Framer motion animation for title
   useEffect(() => {
     if (isInView) {
       controls.start("visible");
@@ -19,33 +18,22 @@ export default function PinnedScrollSection() {
     }
   }, [isInView, controls]);
 
-  // Scroll progress handler with requestAnimationFrame for smooth mobile performance
   useEffect(() => {
-    let ticking = false;
-
     const handleScroll = () => {
       if (!sectionRef.current) return;
 
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const section = sectionRef.current!;
-          const rect = section.getBoundingClientRect();
-          const sectionHeight = section.offsetHeight;
-          const windowHeight = window.innerHeight;
+      const section = sectionRef.current;
+      const rect = section.getBoundingClientRect();
+      const sectionHeight = section.offsetHeight;
+      const windowHeight = window.innerHeight;
 
-          if (rect.top <= 0 && rect.bottom >= windowHeight) {
-            const progress = Math.abs(rect.top) / (sectionHeight - windowHeight);
-            setScrollProgress(Math.min(Math.max(progress, 0), 1));
-          } else if (rect.top > 0) {
-            setScrollProgress(0);
-          } else {
-            setScrollProgress(1);
-          }
-
-          ticking = false;
-        });
-
-        ticking = true;
+      if (rect.top <= 0 && rect.bottom >= windowHeight) {
+        const progress = Math.abs(rect.top) / (sectionHeight - windowHeight);
+        setScrollProgress(Math.min(Math.max(progress, 0), 1));
+      } else if (rect.top > 0) {
+        setScrollProgress(0);
+      } else {
+        setScrollProgress(1);
       }
     };
 
@@ -56,17 +44,16 @@ export default function PinnedScrollSection() {
   }, []);
 
   // Smoother easing function
-  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-
-  // Adjusted scale and opacity
-  const boxScale = 1 + easeOutCubic(scrollProgress) * 4; // smaller, smooth scale
+  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+  
+  const boxScale = 1 + (easeOutCubic(scrollProgress) * 10);
   const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.15));
   const contentOpacity = scrollProgress > 0.6 ? Math.min(1, (scrollProgress - 0.6) / 0.2) : 0;
   const titleOpacity = scrollProgress < 0.3 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.3) / 0.2));
   const bgWhite = scrollProgress > 0.7;
 
   return (
-    <div>
+    <div className="">
       {/* Pinned Scroll Section */}
       <section
         ref={sectionRef}
@@ -76,10 +63,7 @@ export default function PinnedScrollSection() {
           transition: 'background-color 0.3s ease-out'
         }}
       >
-        <div 
-          className="sticky top-0 h-screen flex items-center justify-center overflow-hidden"
-          style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
-        >
+        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
 
           {/* Main Title with Box */}
           <div
@@ -111,9 +95,8 @@ export default function PinnedScrollSection() {
                   style={{
                     width: '160px', 
                     height: '70px',
-                    transform: `scale(${boxScale}) translateZ(0)`,
+                    transform: `scale(${boxScale})`,
                     transformOrigin: 'center center',
-                    willChange: 'transform, opacity',
                     transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
                     opacity: boxOpacity
                   }}
@@ -144,15 +127,97 @@ export default function PinnedScrollSection() {
               <h2 className="text-center text-xl md:text-4xl lg:text-6xl text-[#0B1013] max-w-2xl m-auto leading-normal flex flex-wrap items-center justify-center gap-3">
                 Upgrade Your Limits, Not Your Budget
               </h2>
-
+              
+              {/* Info Bar */}
               <p className="text-center text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mt-4 mb-4 md:mb-9">
                 Not everyone has the same goals. That's why we give you access to different account levels.
               </p>
 
               {/* Pricing Cards Grid */}
               <div className="grid grid-cols-1 md:grid-cols-[0.95fr_1.1fr_0.95fr] gap-2 md:gap-6">
-                {/* Cards here (Standard, Premium, Elite) */}
-                {/* Keep your existing card markup unchanged */}
+                {/* Standard Card */}
+                <div className="bg-white rounded-[20px] p-4 md:p-8 shadow-md hover:shadow-xl transition-all duration-300">
+                  <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Standard</h3>
+                  <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
+                    Affordable Foundation For Individuals And Small Teams.
+                  </p>
+
+                  <div className="space-y-1">
+                    <div className="flex items-start gap-3">
+                      <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
+                        Ideal for testing and early campaigns
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
+                        Simple setup with essential features
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Premium Card */}
+                <div className="bg-white rounded-[20px] p-4 md:p-12 shadow-md hover:shadow-xl transition-all duration-300">
+                  <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Premium</h3>
+                  <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
+                    Enhanced performance with advanced reliability and reach.
+                  </p>
+
+                  <div className="space-y-1">
+                    <div className="flex items-start gap-3">
+                      <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
+                        Higher limits for scaling operations
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
+                        Priority support for smoother workflows
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Elite Card */}
+                <div className="bg-white rounded-[20px] p-4 md:p-8 shadow-md hover:shadow-xl transition-all duration-300">
+                  <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Elite</h3>
+                  <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
+                    Exclusive access, unmatched trust, and priority service.
+                  </p>
+
+                  <div className="space-y-1">
+                    <div className="flex items-start gap-3">
+                      <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
+                        Whitelisted for maximum deliverability
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
+                        Dedicated support and fast-track features
+                      </p>
+                    </div> 
+                  </div>
+                </div>
               </div>
             </div>
           </div>
