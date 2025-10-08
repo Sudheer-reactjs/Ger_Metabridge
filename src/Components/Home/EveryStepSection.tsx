@@ -120,26 +120,37 @@ export default function PinnedScrollSection() {
                   backfaceVisibility: "hidden",
                 }}
               >
-                <div className="relative w-full h-full flex items-center justify-center p-3">
-                  {/* Separate layer for text (no blur in Safari) */}
-                  <div
-                    className="absolute inset-0 flex items-center justify-center"
-                    style={{
-                      transform: "translateZ(0)",
-                      WebkitFontSmoothing: "antialiased",
-                      transformStyle: "flat",
-                    }}
-                  >
-                    <div className="text-gray-900 text-xs leading-tight text-center">
-                      <div className="glancyr-medium mb-1">
-                        Choose the Plan That
-                      </div>
-                      <div className="glancyr-medium text-[10px]">
-                        Fits Your Growth
-                      </div>
-                    </div>
-                  </div>
-                </div>
+{/* Crisp & Smooth Box for Safari */}
+<div className="relative inline-block w-[160px] h-[70px]">
+  {/* Animated Box Background */}
+  <div
+    className="absolute inset-0 bg-[#f1f5f8] rounded-lg shadow-2xl"
+    style={{
+      transform: `scale3d(${boxScale}, ${boxScale}, 1)`,
+      transformOrigin: "center center",
+      transition: "transform 0.2s ease-out, opacity 0.2s ease-out",
+      opacity: boxOpacity,
+      willChange: "transform, opacity",
+      backfaceVisibility: "hidden",
+    }}
+  ></div>
+
+  {/* Static Text Layer (no transform → no blur) */}
+  <div
+    className="relative w-full h-full flex items-center justify-center p-3"
+    style={{
+      WebkitFontSmoothing: "antialiased",
+      textRendering: "optimizeLegibility",
+      backfaceVisibility: "hidden",
+    }}
+  >
+    <div className="text-gray-900 text-xs leading-tight text-center">
+      <div className="glancyr-medium mb-1">Choose the Plan That</div>
+      <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
+    </div>
+  </div>
+</div>
+
               </span>
 
               <span>Step</span>
