@@ -62,6 +62,13 @@ img{
   animation: marquee-reverse 15s linear infinite;
 }
 
+@supports (-webkit-touch-callout: none) {
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
 
 @media(max-width: 768px){
   .animate-marquee-reverse {
