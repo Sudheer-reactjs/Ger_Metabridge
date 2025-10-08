@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, useInView, useAnimation } from "framer-motion";
 
-const isIOS = typeof navigator !== 'undefined' && /iP(hone|ad|od)/.test(navigator.platform) || (typeof navigator !== 'undefined' && /Mac/.test(navigator.platform) && 'ontouchend' in document);
+// More precise Safari detection
+const isIOS = typeof navigator !== 'undefined' && /iP(hone|ad|od)/.test(navigator.platform);
+const isSafari = typeof navigator !== 'undefined' && /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent) && !/Chromium/.test(navigator.userAgent);
+const needsSafariFix = isIOS || isSafari;
 
 export default function PinnedScrollSection() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -63,10 +66,10 @@ export default function PinnedScrollSection() {
     };
   }, []);
 
-  // Easing: slightly softer on iOS
+  // Easing functions
   const easeOutQuad = (t: number) => 1 - (1 - t) * (1 - t);
   const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-  const ease = isIOS ? easeOutQuad : easeOutCubic;
+  const ease = needsSafariFix ? easeOutQuad : easeOutCubic;
 
   // Mobile-aware max scale to prevent giant bitmap on iPhone
   const maxScale = useMemo(() => {
@@ -78,14 +81,38 @@ export default function PinnedScrollSection() {
 
   // Derived values with gentler thresholds to avoid flicker
   const boxScale = 1 + (eased * maxScale);
-  const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.18)); // slightly longer fade
-  const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.62) / 0.22) : 0; // smoother ramp
+  const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.18));
+  const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.62) / 0.22) : 0;
   const titleOpacity = scrollProgress < 0.32 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.32) / 0.24));
   const bgWhite = scrollProgress > 0.72;
 
   // Debounced pointerEvents toggling to avoid rapid flip-flop
   const contentPointerEvents = contentOpacity > 0.05 ? 'auto' : 'none';
   const titlePointerEvents = titleOpacity > 0.05 ? 'auto' : 'none';
+
+  // Create styles for the box based on browser
+  const boxStyle = needsSafariFix ? {
+    width: '160px',
+    height: '70px',
+    transform: `scale(${boxScale})`,
+    transformOrigin: 'center center',
+    transition: 'transform 0.3s ease-out, opacity 0.3s ease-out',
+    opacity: boxOpacity,
+    willChange: 'transform, opacity',
+    WebkitBackfaceVisibility: 'hidden',
+    backfaceVisibility: 'hidden',
+    WebkitFontSmoothing: 'antialiased',
+    MozOsxFontSmoothing: 'grayscale',
+    WebkitTransform: `translateZ(0) scale(${boxScale})`
+  } : {
+    width: '160px',
+    height: '70px',
+    transform: `scale(${boxScale})`,
+    transformOrigin: 'center center',
+    transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
+    opacity: boxOpacity,
+    willChange: 'transform, opacity'
+  };
 
   return (
     <div className="">
@@ -125,26 +152,21 @@ export default function PinnedScrollSection() {
                 <span className="block w-full"></span>
                 <span>Every</span>
 
-                {/* White Box Between Words */}
+                {/* White Box Between Words - Fixed for Safari but not affecting other browsers */}
                 <span
                   className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
-                  style={{
-                    width: '160px',
-                    height: '70px',
-                    transform: `scale(${boxScale})`,
-                    transformOrigin: 'center center',
-                    transition: isIOS
-                      ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
-                      : 'transform 0.15s ease-out, opacity 0.15s ease-out',
-                    opacity: boxOpacity,
-                    willChange: 'transform, opacity',
-                    WebkitBackfaceVisibility: 'hidden',
-                    backfaceVisibility: 'hidden',
-                    WebkitTransform: `translateZ(0) scale(${boxScale})`
-                  }}
+                  style={boxStyle}
                 >
                   <div className="w-full h-full flex items-center justify-center p-3">
-                    <div className="text-gray-900 text-xs leading-tight text-center">
+                    <div 
+                      className="text-gray-900 text-xs leading-tight text-center"
+                      style={needsSafariFix ? {
+                        WebkitTransform: 'translateZ(0)',
+                        transform: 'translateZ(0)',
+                        WebkitFontSmoothing: 'antialiased',
+                        MozOsxFontSmoothing: 'grayscale'
+                      } : {}}
+                    >
                       <div className="glancyr-medium mb-1">Choose the Plan That </div>
                       <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
                     </div>
@@ -260,4 +282,4 @@ export default function PinnedScrollSection() {
       </section>
     </div>
   );
-} 
+}
