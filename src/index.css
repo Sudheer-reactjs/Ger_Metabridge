@@ -71,3 +71,15 @@ img{
   animation: marquee 8s linear infinite;
 }
 }
+
+
+
+.safari-text-fix {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+@supports (-webkit-touch-callout: none) {
+  .safari-text-fix {
+    -webkit-text-stroke: 0.25px transparent;
+  }
+}

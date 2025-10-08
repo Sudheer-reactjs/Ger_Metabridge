@@ -126,44 +126,53 @@ export default function PinnedScrollSection() {
                 <span>Every</span>
 
                 {/* White Box Between Words */}
-       <span
-  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
+<span
+  className="relative inline-block rounded-lg shadow-2xl overflow-hidden bg-[#f1f5f8]"
   style={{
     width: '160px',
     height: '70px',
+    opacity: boxOpacity,
     transform: `scale(${boxScale})`,
     transformOrigin: 'center center',
     transition: isIOS
       ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
       : 'transform 0.15s ease-out, opacity 0.15s ease-out',
-    opacity: boxOpacity,
     willChange: 'transform, opacity',
-    // 👇 Keep GPU compositing only for the box
     WebkitTransform: `translateZ(0) scale(${boxScale})`,
     backfaceVisibility: 'hidden',
     WebkitBackfaceVisibility: 'hidden',
   }}
 >
+  {/* Scaled background only */}
   <div
-    className="w-full h-full flex items-center justify-center p-3"
-    // 👇 Important: isolate text from scaling bitmap
+    className="absolute inset-0 bg-[#f1f5f8]"
     style={{
-      position: 'relative',
-      zIndex: 1,
-      WebkitTransform: 'translateZ(0)', // force Safari to re-rasterize text
       transform: 'translateZ(0)',
       backfaceVisibility: 'hidden',
       WebkitBackfaceVisibility: 'hidden',
+    }}
+  />
+
+  {/* Text layer (NOT scaled) */}
+  <div
+    className="absolute inset-0 flex items-center justify-center p-3"
+    style={{
       WebkitFontSmoothing: 'antialiased',
+      transform: 'none',
+      backfaceVisibility: 'hidden',
+      WebkitBackfaceVisibility: 'hidden',
       textRendering: 'geometricPrecision',
+      zIndex: 1,
     }}
   >
-    <div className="text-gray-900 text-xs leading-tight text-center">
+    <div className="text-gray-900 text-xs leading-tight text-center safari-text-fix">
+
       <div className="glancyr-medium mb-1">Choose the Plan That</div>
       <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
     </div>
-  </div> 
+  </div>
 </span>
+
 
 
                 <span>Step</span>
