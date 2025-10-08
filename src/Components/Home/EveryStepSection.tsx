@@ -126,44 +126,43 @@ export default function PinnedScrollSection() {
                 <span>Every</span>
 
                 {/* White Box Between Words */}
-              <span
+       <span
   className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
   style={{
     width: '160px',
     height: '70px',
-    opacity: boxOpacity,
-    willChange: 'transform, opacity',
+    transform: `scale(${boxScale})`,
+    transformOrigin: 'center center',
     transition: isIOS
       ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
       : 'transform 0.15s ease-out, opacity 0.15s ease-out',
+    opacity: boxOpacity,
+    willChange: 'transform, opacity',
+    // 👇 Keep GPU compositing only for the box
+    WebkitTransform: `translateZ(0) scale(${boxScale})`,
+    backfaceVisibility: 'hidden',
+    WebkitBackfaceVisibility: 'hidden',
   }}
 >
-  {/* Only scale this wrapper */}
   <div
+    className="w-full h-full flex items-center justify-center p-3"
+    // 👇 Important: isolate text from scaling bitmap
     style={{
-      transform: `scale(${boxScale})`,
-      transformOrigin: 'center center',
-      WebkitTransform: `scale(${boxScale})`,
+      position: 'relative',
+      zIndex: 1,
+      WebkitTransform: 'translateZ(0)', // force Safari to re-rasterize text
+      transform: 'translateZ(0)',
       backfaceVisibility: 'hidden',
       WebkitBackfaceVisibility: 'hidden',
+      WebkitFontSmoothing: 'antialiased',
+      textRendering: 'geometricPrecision',
     }}
-    className="w-full h-full flex items-center justify-center p-3"
   >
-    {/* Text layer separated — no transform here */}
-    <div
-      className="text-gray-900 text-xs leading-tight text-center"
-      style={{
-        WebkitFontSmoothing: 'antialiased',
-        transform: 'none',
-        backfaceVisibility: 'hidden',
-        WebkitBackfaceVisibility: 'hidden',
-        willChange: 'auto',
-      }}
-    >
+    <div className="text-gray-900 text-xs leading-tight text-center">
       <div className="glancyr-medium mb-1">Choose the Plan That</div>
       <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
     </div>
-  </div>
+  </div> 
 </span>
 
 
