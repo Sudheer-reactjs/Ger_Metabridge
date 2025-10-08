@@ -90,29 +90,11 @@ export default function PinnedScrollSection() {
   const contentPointerEvents = contentOpacity > 0.05 ? 'auto' : 'none';
   const titlePointerEvents = titleOpacity > 0.05 ? 'auto' : 'none';
 
-  // Create styles for the box based on browser
-  const boxStyle = needsSafariFix ? {
-    width: '160px',
-    height: '70px',
-    transform: `scale(${boxScale})`,
-    transformOrigin: 'center center',
-    transition: 'transform 0.3s ease-out, opacity 0.3s ease-out',
-    opacity: boxOpacity,
-    willChange: 'transform, opacity',
-    WebkitBackfaceVisibility: 'hidden',
-    backfaceVisibility: 'hidden',
-    WebkitFontSmoothing: 'antialiased',
-    MozOsxFontSmoothing: 'grayscale',
-    WebkitTransform: `translateZ(0) scale(${boxScale})`
-  } : {
-    width: '160px',
-    height: '70px',
-    transform: `scale(${boxScale})`,
-    transformOrigin: 'center center',
-    transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
-    opacity: boxOpacity,
-    willChange: 'transform, opacity'
-  };
+  // Calculate dimensions for the box
+  const boxWidth = 160;
+  const boxHeight = 70;
+  const scaledWidth = boxWidth * boxScale;
+  const scaledHeight = boxHeight * boxScale;
 
   return (
     <div className="">
@@ -152,26 +134,62 @@ export default function PinnedScrollSection() {
                 <span className="block w-full"></span>
                 <span>Every</span>
 
-                {/* White Box Between Words - Fixed for Safari but not affecting other browsers */}
-                <span
-                  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
-                  style={boxStyle}
-                >
-                  <div className="w-full h-full flex items-center justify-center p-3">
+                {/* White Box Between Words - Different approach for Safari */}
+                {needsSafariFix ? (
+                  // Safari-specific approach using width/height instead of scale
+                  <span
+                    className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden flex items-center justify-center"
+                    style={{
+                      width: `${scaledWidth}px`,
+                      height: `${scaledHeight}px`,
+                      transition: 'width 0.3s ease-out, height 0.3s ease-out, opacity 0.3s ease-out',
+                      opacity: boxOpacity,
+                      willChange: 'width, height, opacity',
+                      WebkitBackfaceVisibility: 'hidden',
+                      backfaceVisibility: 'hidden'
+                    }}
+                  >
                     <div 
                       className="text-gray-900 text-xs leading-tight text-center"
-                      style={needsSafariFix ? {
-                        WebkitTransform: 'translateZ(0)',
-                        transform: 'translateZ(0)',
+                      style={{
+                        width: `${boxWidth}px`,
+                        height: `${boxHeight}px`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '12px',
                         WebkitFontSmoothing: 'antialiased',
                         MozOsxFontSmoothing: 'grayscale'
-                      } : {}}
+                      }}
                     >
-                      <div className="glancyr-medium mb-1">Choose the Plan That </div>
-                      <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
+                      <div>
+                        <div className="glancyr-medium mb-1">Choose the Plan That </div>
+                        <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
+                      </div>
                     </div>
-                  </div>
-                </span>
+                  </span>
+                ) : (
+                  // Standard approach for other browsers
+                  <span
+                    className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
+                    style={{
+                      width: '160px',
+                      height: '70px',
+                      transform: `scale(${boxScale})`,
+                      transformOrigin: 'center center',
+                      transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
+                      opacity: boxOpacity,
+                      willChange: 'transform, opacity'
+                    }}
+                  >
+                    <div className="w-full h-full flex items-center justify-center p-3">
+                      <div className="text-gray-900 text-xs leading-tight text-center">
+                        <div className="glancyr-medium mb-1">Choose the Plan That </div>
+                        <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
+                      </div>
+                    </div>
+                  </span>
+                )}
 
                 <span>Step</span>
               </h2>
