@@ -123,16 +123,16 @@ export default function PinnedScrollSection() {
             
           >
             <div className="w-full max-w-[968px]">
-               <h2 className="text-center text-3xl md:text-5xl lg:text-6xl text-[#0B1013] max-w-2xl m-auto leading-normal flex flex-wrap items-center justify-center gap-3">Upgrade Your Limits, Not Your Budget</h2>
+               <h2 className="text-center text-xl md:text-4xl lg:text-6xl text-[#0B1013] max-w-2xl m-auto leading-normal flex flex-wrap items-center justify-center gap-3">Upgrade Your Limits, Not Your Budget</h2>
               {/* Info Bar */}
-              <p className="text-center text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-9">Not everyone has the same goals. That's why we give you access to different account levels.</p>
+              <p className="text-center text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mt-4 mb-4 md:mb-9">Not everyone has the same goals. That's why we give you access to different account levels.</p>
 
               {/* Pricing Cards Grid */}
               <div className="grid grid-cols-1 md:grid-cols-[0.95fr_1.1fr_0.95fr] gap-2 md:gap-6">
                 {/* Standard Card */}
-                <div className="bg-white rounded-[20px] p-5 md:p-8">
+                <div className="bg-white rounded-[20px] p-4 md:p-8">
                   <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Standard</h3>
-                  <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
+                  <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
                     Affordable Foundation For Individuals And Small Teams.
                   </p>
 
@@ -141,22 +141,22 @@ export default function PinnedScrollSection() {
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                       </svg>
-                      <p className="text-[#454B50] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Ideal for testing and early campaigns</p>
+                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Ideal for testing and early campaigns</p>
                     </div>
 
                     <div className="flex items-start gap-3">
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                       </svg>
-                      <p className="text-[#454B50] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Simple setup with essential features</p>
+                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Simple setup with essential features</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Premium Card */}
-                <div className="bg-white rounded-[20px] p-5 md:p-12">
+                <div className="bg-white rounded-[20px] p-4 md:p-12">
                   <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Premium</h3>
-                  <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
+                  <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
                     Enhanced performance with advanced reliability and reach.
                   </p>
 
@@ -165,22 +165,22 @@ export default function PinnedScrollSection() {
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                       </svg>
-                      <p className="text-[#454B50] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Higher limits for scaling operations</p>
+                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Higher limits for scaling operations</p>
                     </div>
 
                     <div className="flex items-start gap-3">
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                       </svg>
-                      <p className="text-[#454B50] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Priority support for smoother workflows</p>
+                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Priority support for smoother workflows</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Elite Card */}
-                <div className="bg-white rounded-[20px] p-5 md:p-8">
+                <div className="bg-white rounded-[20px] p-4 md:p-8">
                   <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Elite</h3>
-                  <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
+                  <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
                     Exclusive access, unmatched trust, and priority service.
                   </p>
 
@@ -189,14 +189,14 @@ export default function PinnedScrollSection() {
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                       </svg>
-                      <p className="text-[#454B50] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Whitelisted for maximum deliverability</p>
+                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Whitelisted for maximum deliverability</p>
                     </div>
 
                     <div className="flex items-start gap-3">
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                       </svg>
-                      <p className="text-[#454B50] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]  ">Dedicated support and fast-track features</p>
+                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]  ">Dedicated support and fast-track features</p>
                     </div> 
                   </div>
                 </div>
