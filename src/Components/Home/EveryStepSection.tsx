@@ -88,15 +88,19 @@ export default function PinnedScrollSection() {
                 <span>Every</span>
 
                 {/* White Box Between Words */}
-                <span
+          <span
                   className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
                   style={{
                     width: '160px', 
                     height: '70px',
-                    transform: `scale(${boxScale})`,
+                    transform: `scale(${boxScale}) translateZ(0)`,
                     transformOrigin: 'center center',
-                    transition: 'transform 0.1s ease-out',
-                    opacity: boxOpacity
+                    opacity: boxOpacity,
+                    willChange: 'transform, opacity',
+                    backfaceVisibility: 'hidden',
+                    WebkitBackfaceVisibility: 'hidden',
+                    perspective: 1000,
+                    WebkitPerspective: 1000
                   }}
                 >
                   <div className="w-full h-full flex items-center justify-center p-3">
