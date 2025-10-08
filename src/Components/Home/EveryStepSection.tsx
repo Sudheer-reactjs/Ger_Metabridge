@@ -88,25 +88,32 @@ export default function PinnedScrollSection() {
                 <span>Every</span>
 
                 {/* White Box Between Words */}
+{/* White Box Between Words */}
                 <span
                   className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
                   style={{
                     width: '160px', 
                     height: window.innerWidth < 768 ? '90px' : '70px',
-                    transform: `scale(${boxScale}) translateZ(0)`,
+                    transform: `scale3d(${boxScale}, ${boxScale}, 1)`,
                     transformOrigin: 'center center',
                     opacity: boxOpacity,
                     willChange: 'transform, opacity',
                     backfaceVisibility: 'hidden',
                     WebkitBackfaceVisibility: 'hidden',
-                    perspective: 1000,
-                    WebkitPerspective: 1000,
-                    WebkitTransform: `scale(${boxScale}) translateZ(0)`,
-                    filter: 'blur(0px)',
-                    WebkitFilter: 'blur(0px)'
+                    WebkitFontSmoothing: 'antialiased',
+                    MozOsxFontSmoothing: 'grayscale',
+                    imageRendering: 'crisp-edges',
+                    WebkitTransform: `scale3d(${boxScale}, ${boxScale}, 1)`,
+                    textRendering: 'optimizeLegibility'
                   }}
                 >
-                  <div className="w-full h-full flex items-center justify-center p-3">
+                  <div 
+                    className="w-full h-full flex items-center justify-center p-3"
+                    style={{
+                      transform: 'translateZ(0)',
+                      WebkitFontSmoothing: 'antialiased'
+                    }}
+                  >
                     <div className="text-gray-900 text-xs leading-tight text-center">
                       <div className="glancyr-medium mb-1">Choose the Plan That </div>
                       <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
