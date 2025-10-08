@@ -61,14 +61,18 @@ img{
   display: flex;
   animation: marquee-reverse 15s linear infinite;
 }
-
 @supports (-webkit-touch-callout: none) {
-  * {
+  .isolation-layer {
+    transform-style: preserve-3d;
+  }
+  .text-layer {
+    isolation: isolate;
+    transform: translateZ(0);
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
+    text-rendering: geometricPrecision;
   }
 }
+
 
 @media(max-width: 768px){
   .animate-marquee-reverse {

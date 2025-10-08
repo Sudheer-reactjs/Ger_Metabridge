@@ -120,9 +120,8 @@ export default function PinnedScrollSection() {
                   backfaceVisibility: "hidden",
                 }}
               >
-{/* Crisp & Smooth Box for Safari */}
-<div className="relative inline-block w-[160px] h-[70px]">
-  {/* Animated Box Background */}
+<div className="relative inline-block w-[160px] h-[70px] isolation-layer">
+  {/* Animated Background */}
   <div
     className="absolute inset-0 bg-[#f1f5f8] rounded-lg shadow-2xl"
     style={{
@@ -132,16 +131,21 @@ export default function PinnedScrollSection() {
       opacity: boxOpacity,
       willChange: "transform, opacity",
       backfaceVisibility: "hidden",
+      WebkitTransformStyle: "preserve-3d",
+      transformStyle: "preserve-3d",
+      WebkitFontSmoothing: "antialiased",
     }}
   ></div>
 
-  {/* Static Text Layer (no transform → no blur) */}
+  {/* Crisp Text Layer */}
   <div
-    className="relative w-full h-full flex items-center justify-center p-3"
+    className="relative w-full h-full flex items-center justify-center p-3 text-layer"
     style={{
+      isolation: "isolate",
+      transform: "translateZ(0)",
       WebkitFontSmoothing: "antialiased",
-      textRendering: "optimizeLegibility",
-      backfaceVisibility: "hidden",
+      textRendering: "geometricPrecision",
+      transformStyle: "preserve-3d",
     }}
   >
     <div className="text-gray-900 text-xs leading-tight text-center">
