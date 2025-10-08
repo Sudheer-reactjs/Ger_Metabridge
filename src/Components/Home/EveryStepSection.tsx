@@ -46,7 +46,7 @@ export default function PinnedScrollSection() {
   // Smoother easing function
   const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
   
-  const boxScale = 1 + (easeOutCubic(scrollProgress) * 25);
+  const boxScale = 1 + (easeOutCubic(scrollProgress) * 12);
   const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.15));
   const contentOpacity = scrollProgress > 0.6 ? Math.min(1, (scrollProgress - 0.6) / 0.2) : 0;
   const titleOpacity = scrollProgress < 0.3 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.3) / 0.2));
