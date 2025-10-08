@@ -77,7 +77,11 @@ img{
 .safari-text-fix {
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
+  isolation: isolate;
+  contain: paint;
 }
+
+/* micro-trick for very thin fonts on Safari */
 @supports (-webkit-touch-callout: none) {
   .safari-text-fix {
     -webkit-text-stroke: 0.25px transparent;
