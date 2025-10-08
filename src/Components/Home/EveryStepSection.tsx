@@ -20,29 +20,37 @@ export default function PinnedScrollSection() {
   }, [isInView, controls]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current) return;
+  let ticking = false;
+  const handleScroll = () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        if (!sectionRef.current) return;
 
-      const section = sectionRef.current;
-      const rect = section.getBoundingClientRect();
-      const sectionHeight = section.offsetHeight;
-      const windowHeight = window.innerHeight;
+        const section = sectionRef.current;
+        const rect = section.getBoundingClientRect();
+        const sectionHeight = section.offsetHeight;
+        const windowHeight = window.innerHeight;
 
-      if (rect.top <= 0 && rect.bottom >= windowHeight) {
-        const progress = Math.abs(rect.top) / (sectionHeight - windowHeight);
-        setScrollProgress(Math.min(Math.max(progress, 0), 1));
-      } else if (rect.top > 0) {
-        setScrollProgress(0);
-      } else {
-        setScrollProgress(1);
-      }
-    };
+        if (rect.top <= 0 && rect.bottom >= windowHeight) {
+          const progress = Math.abs(rect.top) / (sectionHeight - windowHeight);
+          setScrollProgress(Math.min(Math.max(progress, 0), 1));
+        } else if (rect.top > 0) {
+          setScrollProgress(0);
+        } else {
+          setScrollProgress(1);
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
+  };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
+  window.addEventListener('scroll', handleScroll);
+  handleScroll();
 
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  return () => window.removeEventListener('scroll', handleScroll);
+}, []);
+
 
   // Calculate animations
   const boxScale = 1 + (scrollProgress * 25);
@@ -89,16 +97,20 @@ export default function PinnedScrollSection() {
 
                 {/* White Box Between Words */}
                 <span
-                  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
-                  style={{
-                    width: '160px',
-                    height: '70px',
-                    transform: `scale(${boxScale})`,
-                    transformOrigin: 'center center',
-                    transition: 'transform 0.1s ease-out',
-                    opacity: boxOpacity
-                  }}
-                >
+  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden 
+             w-[160px] h-[70px] sm:w-[200px] sm:h-[90px] md:w-[240px] md:h-[110px]"
+  style={{
+    transform: `scale(${boxScale}) translateZ(0)`,
+    transformOrigin: 'center center',
+    willChange: 'transform, opacity',
+    backfaceVisibility: 'hidden',
+    WebkitFontSmoothing: 'subpixel-antialiased',
+    filter: 'blur(0)',
+    opacity: boxOpacity,
+  }}
+>
+
+
                   <div className="w-full h-full flex items-center justify-center p-3">
                     <div className="text-gray-900 text-xs leading-tight text-center">
                       <div className="glancyr-medium mb-1">Choose the Plan That </div>
@@ -114,7 +126,7 @@ export default function PinnedScrollSection() {
 
           {/* Full Screen Content - Appears after box fills screen */}
           <div
-            className="absolute inset-0 z-30 bg-[#f1f5f8] flex items-center justify-center px-4 sm:px-6 lg:px-8 xl:px-14 overflow-y-auto rounded-[21.95px]"
+            className="absolute pt-[90px] inset-0 z-30 bg-[#f1f5f8] flex items-center justify-center px-4 sm:px-6 lg:px-8 xl:px-14 overflow-y-auto rounded-[21.95px]"
             style={{
               opacity: contentOpacity,
               pointerEvents: contentOpacity > 0 ? 'auto' : 'none'
