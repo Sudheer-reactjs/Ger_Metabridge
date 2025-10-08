@@ -170,7 +170,7 @@ export default function PinnedScrollSection() {
             <div className="w-full max-w-[968px]">
               <h2 className="text-center text-3xl md:text-5xl lg:text-6xl text-[#0B1013] max-w-2xl m-auto leading-normal flex flex-wrap items-center justify-center gap-3">
                 Upgrade Your Limits, Not Your Budget
-              </h2>
+              </h2> 
 
               <p className="text-center text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mt-4 mb-4 md:mb-9">
                 Not everyone has the same goals. That's why we give you access to different account levels.
