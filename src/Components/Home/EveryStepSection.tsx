@@ -82,7 +82,7 @@ export default function PinnedScrollSection() {
                 visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 14, duration: 0.8 } }
               }}
             >
-              <h1 className="text-3xl md:text-5xl lg:text-6xl text-white leading-none flex flex-wrap items-center justify-center gap-3">
+              <h2 className="text-3xl md:text-5xl lg:text-6xl text-white leading-none flex flex-wrap items-center justify-center gap-3">
                 <span>The Right Solution For</span>
                 <span className="block w-full"></span>
                 <span>Every</span>
@@ -101,14 +101,14 @@ export default function PinnedScrollSection() {
                 >
                   <div className="w-full h-full flex items-center justify-center p-3">
                     <div className="text-gray-900 text-xs leading-tight text-center">
-                      <div className="glancyr-medium mb-1">The Right Solution For</div>
-                      <div className="glancyr-medium text-[10px]">Every Step</div>
+                      <div className="glancyr-medium mb-1">Choose the Plan That </div>
+                      <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
                     </div>
                   </div>
                 </span>
 
                 <span>Step</span>
-              </h1>
+              </h2>
             </motion.div>
           </div>
 
@@ -123,6 +123,7 @@ export default function PinnedScrollSection() {
             
           >
             <div className="w-full max-w-[968px]">
+               <h2 className="text-center text-3xl md:text-5xl lg:text-6xl text-[#0B1013] max-w-2xl m-auto leading-normal flex flex-wrap items-center justify-center gap-3">Upgrade Your Limits, Not Your Budget</h2>
               {/* Info Bar */}
               <p className="text-center text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-9">Not everyone has the same goals. That's why we give you access to different account levels.</p>
 
@@ -140,14 +141,14 @@ export default function PinnedScrollSection() {
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                       </svg>
-                      <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Ideal for testing and early campaigns</p>
+                      <p className="text-[#454B50] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Ideal for testing and early campaigns</p>
                     </div>
 
                     <div className="flex items-start gap-3">
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                       </svg>
-                      <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Simple setup with essential features</p>
+                      <p className="text-[#454B50] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Simple setup with essential features</p>
                     </div>
                   </div>
                 </div>
@@ -164,14 +165,14 @@ export default function PinnedScrollSection() {
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                       </svg>
-                      <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Higher limits for scaling operations</p>
+                      <p className="text-[#454B50] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Higher limits for scaling operations</p>
                     </div>
 
                     <div className="flex items-start gap-3">
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                       </svg>
-                      <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Priority support for smoother workflows</p>
+                      <p className="text-[#454B50] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Priority support for smoother workflows</p>
                     </div>
                   </div>
                 </div>
@@ -188,14 +189,14 @@ export default function PinnedScrollSection() {
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                       </svg>
-                      <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Whitelisted for maximum deliverability</p>
+                      <p className="text-[#454B50] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">Whitelisted for maximum deliverability</p>
                     </div>
 
                     <div className="flex items-start gap-3">
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                       </svg>
-                      <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]  ">Dedicated support and fast-track features</p>
+                      <p className="text-[#454B50] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]  ">Dedicated support and fast-track features</p>
                     </div> 
                   </div>
                 </div>
@@ -205,18 +206,6 @@ export default function PinnedScrollSection() {
         </div>
       </section>
 
-      {/* Next Section */}
-      <section className="min-h-screen bg-white py-20 flex items-center justify-center">
-        <div className="text-center px-8">
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">Ready to Get Started?</h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-            Choose the plan that's right for you and start building today.
-          </p>
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-lg text-lg transition-colors shadow-lg">
-            Get Started Now
-          </button>
-        </div>
-      </section>
     </div>
   );
 }
