@@ -126,68 +126,30 @@ export default function PinnedScrollSection() {
                 <span>Every</span>
 
                 {/* White Box Between Words */}
-<span
-  className="relative inline-block rounded-lg shadow-2xl overflow-hidden"
-  style={{
-    width: '160px',
-    height: '70px',
-    transform: `scale(${boxScale})`,
-    transformOrigin: 'center center',
-    transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
-    willChange: 'transform',
-    WebkitTransform: `translate3d(0,0,0) scale(${boxScale})`, // force GPU
-    backfaceVisibility: 'hidden',
-    WebkitBackfaceVisibility: 'hidden',
-    WebkitFontSmoothing: 'antialiased',
-    textRendering: 'geometricPrecision',
-  }}
->
-  {/* Background */}
-  <div
-    className="absolute inset-0 bg-[#f1f5f8] rounded-lg"
-    style={{
-      transform: 'translateZ(0)', // force GPU for background
-      backfaceVisibility: 'hidden',
-      WebkitBackfaceVisibility: 'hidden',
-    }}
-  />
-
-  {/* Text */}
-  <div
-    className="absolute inset-0 flex items-center justify-center"
-    style={{
-      transform: 'translateZ(0)', // force GPU for text
-      backfaceVisibility: 'hidden',
-      WebkitBackfaceVisibility: 'hidden',
-      WebkitFontSmoothing: 'antialiased',
-      textRendering: 'geometricPrecision',
-      zIndex: 1,
-    }}
-  >
-    <svg
-      width="160"
-      height="70"
-      viewBox="0 0 160 70"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <text
-        x="50%"
-        y="50%"
-        dominantBaseline="middle"
-        textAnchor="middle"
-        fontSize="14"
-        fontFamily="sans-serif"
-        fill="#051420"
-      >
-        Choose Plan
-      </text>
-    </svg>
-  </div>
-</span>
-
-
-
+                <span
+                  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
+                  style={{
+                    width: '160px',
+                    height: '70px',
+                    transform: `scale(${boxScale})`,
+                    transformOrigin: 'center center',
+                    transition: isIOS
+                      ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
+                      : 'transform 0.15s ease-out, opacity 0.15s ease-out',
+                    opacity: boxOpacity,
+                    willChange: 'transform, opacity',
+                    WebkitBackfaceVisibility: 'hidden',
+                    backfaceVisibility: 'hidden',
+                    WebkitTransform: `translateZ(0) scale(${boxScale})`
+                  }}
+                >
+                  <div className="w-full h-full flex items-center justify-center p-3">
+                    <div className="text-gray-900 text-xs leading-tight text-center">
+                      <div className="glancyr-medium mb-1">Choose the Plan That </div>
+                      <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
+                    </div>
+                  </div>
+                </span>
 
                 <span>Step</span>
               </h2>
