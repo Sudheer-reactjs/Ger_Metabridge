@@ -81,7 +81,7 @@ export default function PinnedScrollSection() {
                 hidden: { opacity: 0, y: 200 },
                 visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 14, duration: 0.8 } }
               }}
-            >
+            > 
               <h2 className="text-3xl md:text-5xl lg:text-6xl text-white leading-none flex flex-wrap items-center justify-center gap-3">
                 <span>The Right Solution For</span>
                 <span className="block w-full"></span>
