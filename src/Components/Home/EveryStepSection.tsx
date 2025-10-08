@@ -1,13 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, useInView, useAnimation } from "framer-motion";
 
-// iOS detection to tune easing/timing for Safari
-const isIOS =
-  (typeof navigator !== 'undefined' && /iP(hone|ad|od)/.test(navigator.platform)) ||
-  (typeof navigator !== 'undefined' && /Mac/.test(navigator.platform) && typeof document !== 'undefined' && 'ontouchend' in document);
-
-// Quantize to reduce subpixel filtering blur on iOS during scale animation
-const quantize = (v: number, step = 0.01) => Math.round(v / step) * step;
+const isIOS = typeof navigator !== 'undefined' && /iP(hone|ad|od)/.test(navigator.platform) || (typeof navigator !== 'undefined' && /Mac/.test(navigator.platform) && 'ontouchend' in document);
 
 export default function PinnedScrollSection() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -48,6 +42,7 @@ export default function PinnedScrollSection() {
         progress = 1;
       }
 
+      // clamp and set once per frame
       setScrollProgress(Math.min(Math.max(progress, 0), 1));
       ticking = false;
     };
@@ -60,6 +55,7 @@ export default function PinnedScrollSection() {
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
+    // initial compute
     requestAnimationFrame(computeProgress);
 
     return () => {
@@ -72,7 +68,7 @@ export default function PinnedScrollSection() {
   const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
   const ease = isIOS ? easeOutQuad : easeOutCubic;
 
-  // Smaller max scale on small screens to avoid raster upscaling cost
+  // Mobile-aware max scale to prevent giant bitmap on iPhone
   const maxScale = useMemo(() => {
     const w = typeof window !== 'undefined' ? window.innerWidth : 1024;
     return w < 640 ? 4 : 10;
@@ -80,35 +76,31 @@ export default function PinnedScrollSection() {
 
   const eased = ease(scrollProgress);
 
-  // Derived values with gentler thresholds
-  const rawWrapperScale = 1 + (eased * maxScale);
-  const wrapperScale = quantize(rawWrapperScale, 0.01);
-  const contentScale = quantize(1 / wrapperScale, 0.01);
-
-  const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.18));
-  const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.62) / 0.22) : 0;
+  // Derived values with gentler thresholds to avoid flicker
+  const boxScale = 1 + (eased * maxScale);
+  const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.18)); // slightly longer fade
+  const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.62) / 0.22) : 0; // smoother ramp
   const titleOpacity = scrollProgress < 0.32 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.32) / 0.24));
   const bgWhite = scrollProgress > 0.72;
 
-  // Debounced pointerEvents threshold to avoid flicker
+  // Debounced pointerEvents toggling to avoid rapid flip-flop
   const contentPointerEvents = contentOpacity > 0.05 ? 'auto' : 'none';
   const titlePointerEvents = titleOpacity > 0.05 ? 'auto' : 'none';
 
   return (
     <div className="">
-      {/* Pinned Scroll Section */}
       <section
         ref={sectionRef}
         className="relative h-[300vh]"
         style={{
           backgroundColor: bgWhite ? '#f1f5f8' : '#0b1016',
           transition: 'background-color 0.3s ease-out',
+          // Helps iOS compositing for sticky region
           WebkitTransform: 'translateZ(0)',
           willChange: 'background-color'
         }}
       >
         <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden" style={{ willChange: 'transform' }}>
-          {/* Main Title with Box */}
           <div
             className="absolute inset-0 flex items-center justify-center z-10 px-4 sm:px-6 lg:px-8 xl:px-14"
             style={{
@@ -139,30 +131,19 @@ export default function PinnedScrollSection() {
                   style={{
                     width: '160px',
                     height: '70px',
-                    // Scale the wrapper to get the expanding effect
-                    transform: `translate3d(0,0,0) scale(${wrapperScale})`,
+                    transform: `scale(${boxScale})`,
                     transformOrigin: 'center center',
                     transition: isIOS
                       ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
                       : 'transform 0.15s ease-out, opacity 0.15s ease-out',
                     opacity: boxOpacity,
                     willChange: 'transform, opacity',
-                    WebkitFontSmoothing: 'antialiased',
-                    MozOsxFontSmoothing: 'grayscale',
-                    backfaceVisibility: 'hidden',
                     WebkitBackfaceVisibility: 'hidden',
-                    contain: 'layout paint size'
+                    backfaceVisibility: 'hidden',
+                    WebkitTransform: `translateZ(0) scale(${boxScale})`
                   }}
                 >
-                  {/* Inner content stays crisp by inversely scaling back to 1:1 */}
-                  <div
-                    className="w-full h-full flex items-center justify-center p-3"
-                    style={{
-                      transform: `translate3d(0,0,0) scale(${contentScale})`,
-                      transformOrigin: 'center center',
-                      willChange: 'transform'
-                    }}
-                  >
+                  <div className="w-full h-full flex items-center justify-center p-3">
                     <div className="text-gray-900 text-xs leading-tight text-center">
                       <div className="glancyr-medium mb-1">Choose the Plan That </div>
                       <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
@@ -175,7 +156,7 @@ export default function PinnedScrollSection() {
             </motion.div>
           </div>
 
-          {/* Full Screen Content - Appears after box fills screen */}
+          {/* Full Screen Content */}
           <div
             className="absolute pt-[90px] inset-0 z-30 bg-[#f1f5f8] flex items-center justify-center px-4 sm:px-6 lg:px-8 xl:px-14 overflow-y-auto rounded-[21.95px]"
             style={{
@@ -187,24 +168,20 @@ export default function PinnedScrollSection() {
             }}
           >
             <div className="w-full max-w-[968px]">
-              <h2 className="text-center text-xl md:text-4xl lg:text-6xl text-[#0B1013] max-w-2xl m-auto leading-normal flex flex-wrap items-center justify-center gap-3">
+              <h2 className="text-center text-3xl md:text-5xl lg:text-6xl text-[#0B1013] max-w-2xl m-auto leading-normal flex flex-wrap items-center justify-center gap-3">
                 Upgrade Your Limits, Not Your Budget
               </h2>
 
-              {/* Info Bar */}
               <p className="text-center text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mt-4 mb-4 md:mb-9">
                 Not everyone has the same goals. That's why we give you access to different account levels.
               </p>
 
-              {/* Pricing Cards Grid */}
               <div className="grid grid-cols-1 md:grid-cols-[0.95fr_1.1fr_0.95fr] gap-2 md:gap-6">
-                {/* Standard Card */}
                 <div className="bg-white rounded-[20px] p-4 md:p-8 shadow-md hover:shadow-xl transition-all duration-300">
                   <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Standard</h3>
                   <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
                     Affordable Foundation For Individuals And Small Teams.
                   </p>
-
                   <div className="space-y-1">
                     <div className="flex items-start gap-3">
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -214,7 +191,6 @@ export default function PinnedScrollSection() {
                         Ideal for testing and early campaigns
                       </p>
                     </div>
-
                     <div className="flex items-start gap-3">
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
@@ -226,13 +202,11 @@ export default function PinnedScrollSection() {
                   </div>
                 </div>
 
-                {/* Premium Card */}
                 <div className="bg-white rounded-[20px] p-4 md:p-12 shadow-md hover:shadow-xl transition-all duration-300">
                   <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Premium</h3>
                   <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
                     Enhanced performance with advanced reliability and reach.
                   </p>
-
                   <div className="space-y-1">
                     <div className="flex items-start gap-3">
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -242,7 +216,6 @@ export default function PinnedScrollSection() {
                         Higher limits for scaling operations
                       </p>
                     </div>
-
                     <div className="flex items-start gap-3">
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
@@ -254,13 +227,11 @@ export default function PinnedScrollSection() {
                   </div>
                 </div>
 
-                {/* Elite Card */}
                 <div className="bg-white rounded-[20px] p-4 md:p-8 shadow-md hover:shadow-xl transition-all duration-300">
                   <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Elite</h3>
                   <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
                     Exclusive access, unmatched trust, and priority service.
                   </p>
-
                   <div className="space-y-1">
                     <div className="flex items-start gap-3">
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -270,7 +241,6 @@ export default function PinnedScrollSection() {
                         Whitelisted for maximum deliverability
                       </p>
                     </div>
-
                     <div className="flex items-start gap-3">
                       <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
