@@ -100,7 +100,12 @@ export default function PinnedScrollSection() {
           willChange: 'background-color'
         }}
       >
-        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden" style={{ willChange: 'transform' }}>
+        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden" 
+     style={{ 
+       willChange: 'transform',
+       perspective: '1000px'
+     }}
+>
           <div
             className="absolute inset-0 flex items-center justify-center z-10 px-4 sm:px-6 lg:px-8 xl:px-14"
             style={{
@@ -126,24 +131,23 @@ export default function PinnedScrollSection() {
                 <span>Every</span>
 
                 {/* White Box Between Words */}
-         <span
-  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
-  style={{
-    width: '160px',
-    height: '70px',
-    transform: `rotate(0.01deg) scale(${boxScale})`,
-    transformOrigin: 'center center',
-    transition: isIOS
-      ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
-      : 'transform 0.15s ease-out, opacity 0.15s ease-out',
-    opacity: boxOpacity,
-    willChange: 'transform, opacity',
-    WebkitBackfaceVisibility: 'hidden',
-    backfaceVisibility: 'hidden',
-    WebkitTransform: `rotate(0.01deg) scale(${boxScale})`
-  }}
->
-
+                <span
+                  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
+                  style={{
+                    width: '160px',
+                    height: '70px',
+                    transform: `scale(${boxScale})`,
+                    transformOrigin: 'center center',
+                    transition: isIOS
+                      ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
+                      : 'transform 0.15s ease-out, opacity 0.15s ease-out',
+                    opacity: boxOpacity,
+                    willChange: 'transform, opacity',
+                    WebkitBackfaceVisibility: 'hidden',
+                    backfaceVisibility: 'hidden',
+                    WebkitTransform: `translateZ(0) scale(${boxScale})`
+                  }}
+                >
                   <div className="w-full h-full flex items-center justify-center p-3">
                     <div className="text-gray-900 text-xs leading-tight text-center">
                       <div className="glancyr-medium mb-1">Choose the Plan That </div>
