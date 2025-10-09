@@ -1,10 +1,10 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
-import LeftImage from "../../Assets/grid-bg2.jpg";
-import CenterImage from "../../Assets/grid-bg2.jpg";
-import RightImage from "../../Assets/grid-bg2.jpg";
-import Logo from "../../Assets/logo.png";
+import LeftImage from "../../Assets/image-left.jpg";
+import CenterImage from "../../Assets/image-center.png";
+import RightImage from "../../Assets/image-right.jpg";
+import PinLogo from "../../Assets/pin-logo.png";
 
 const ImagePinnedSection = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -44,16 +44,16 @@ const ImagePinnedSection = () => {
   const textY = useTransform(scrollYProgress, [0.6, 0.8], [isMobile ? 50 : 0, 0]); // for mobile, slide up from below
 
   return (
-    <section ref={ref} className="relative h-[350vh] bg-white">
+    <section ref={ref} className="relative h-[350vh]">
       {/* Sticky container */}
       <div className="sticky top-0 flex items-center justify-center h-screen overflow-hidden">
         {/* Grid for Images */}
-        <div className="grid grid-cols-3 gap-6 w-[80%] items-center">
+        <div className="grid md:grid-cols-[0.6fr_1.1fr_0.6fr] gap-2 w-full items-center p-4 sm:p-6 lg:p-8 xl:p-14 h-full">
           {/* Left Image */}
           <motion.img
             src={LeftImage}
             style={{ opacity: leftOpacity, y: leftY }}
-            className="w-full h-auto object-cover rounded-2xl"
+            className="w-full h-full object-cover rounded-[20px]"
             alt="Left"
           />
 
@@ -61,7 +61,7 @@ const ImagePinnedSection = () => {
           <motion.img
             src={CenterImage}
             style={{ scale: centerScale, opacity: centerOpacity }}
-            className="w-full h-auto object-cover rounded-2xl z-10"
+            className="w-full h-full object-cover rounded-[20px] z-10"
             alt="Center"
           />
 
@@ -69,14 +69,14 @@ const ImagePinnedSection = () => {
           <motion.img
             src={RightImage}
             style={{ opacity: rightOpacity, y: rightY }}
-            className="w-full h-auto object-cover rounded-2xl"
+            className="w-full h-full object-cover rounded-[20px]"
             alt="Right"
           />
         </div>
 
         {/* Logo */}
         <motion.img
-          src={Logo}
+          src={PinLogo}
           style={{
             opacity: logoOpacity,
             x: logoX,

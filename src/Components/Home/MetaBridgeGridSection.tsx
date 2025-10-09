@@ -38,9 +38,17 @@ const MetaBridgeGridSection = () => {
       transition: { ...transition, delay },
     },
   });
+   const conatctVariants = (delay: number): Variants => ({
+    hidden: { opacity: 0, y: 150 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { ...transition, delay },
+    },
+  });
 
   return (
-    <section className="w-full py-10 md:py-24 bg-[#f1f5f8] rounded-b-[21px] overflow-hidden">
+    <section className="w-full py-10 md:py-16 bg-[#f1f5f8] rounded-b-[21px] overflow-hidden">
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-14">
         {/* Heading */}
         <motion.div
@@ -153,7 +161,7 @@ const MetaBridgeGridSection = () => {
           ref={buttonRef}
           initial="hidden"
           animate={buttonInView ? "visible" : "hidden"}
-          variants={gridVariants(0.6)}
+          variants={conatctVariants(0.9)}
           className="flex items-center space-x-4 justify-center mt-6 md:mt-10"
         >
           <ContactButton />
