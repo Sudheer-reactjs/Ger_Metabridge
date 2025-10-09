@@ -21,11 +21,13 @@ export default function PinnedScrollSection() {
     }
   }, [isInView, controls]);
 
+  // rAF-throttled scroll handler for smoother iOS updates
   useEffect(() => {
     let ticking = false;
 
     const computeProgress = () => {
       if (!sectionRef.current) return;
+
       const section = sectionRef.current;
       const rect = section.getBoundingClientRect();
       const sectionHeight = section.offsetHeight;
@@ -40,6 +42,7 @@ export default function PinnedScrollSection() {
         progress = 1;
       }
 
+      // clamp and set once per frame
       setScrollProgress(Math.min(Math.max(progress, 0), 1));
       ticking = false;
     };
@@ -52,6 +55,7 @@ export default function PinnedScrollSection() {
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
+    // initial compute
     requestAnimationFrame(computeProgress);
 
     return () => {
@@ -59,10 +63,12 @@ export default function PinnedScrollSection() {
     };
   }, []);
 
+  // Easing: slightly softer on iOS
   const easeOutQuad = (t: number) => 1 - (1 - t) * (1 - t);
   const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
   const ease = isIOS ? easeOutQuad : easeOutCubic;
 
+  // Mobile-aware max scale to prevent giant bitmap on iPhone
   const maxScale = useMemo(() => {
     const w = typeof window !== 'undefined' ? window.innerWidth : 1024;
     return w < 640 ? 4 : 10;
@@ -70,16 +76,16 @@ export default function PinnedScrollSection() {
 
   const eased = ease(scrollProgress);
 
+  // Derived values with gentler thresholds to avoid flicker
   const boxScale = 1 + (eased * maxScale);
-  const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.18));
-  const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.62) / 0.22) : 0;
+  const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.18)); // slightly longer fade
+  const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.62) / 0.22) : 0; // smoother ramp
   const titleOpacity = scrollProgress < 0.32 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.32) / 0.24));
   const bgWhite = scrollProgress > 0.72;
 
+  // Debounced pointerEvents toggling to avoid rapid flip-flop
   const contentPointerEvents = contentOpacity > 0.05 ? 'auto' : 'none';
   const titlePointerEvents = titleOpacity > 0.05 ? 'auto' : 'none';
-
-  const roundedBoxScale = useMemo(() => Math.round(boxScale * 100) / 100, [boxScale]);
 
   return (
     <div className="">
@@ -89,11 +95,11 @@ export default function PinnedScrollSection() {
         style={{
           backgroundColor: bgWhite ? '#f1f5f8' : '#0b1016',
           transition: 'background-color 0.3s ease-out',
+          // Helps iOS compositing for sticky region
           WebkitTransform: 'translateZ(0)',
           willChange: 'background-color'
         }}
       >
-        {/* *** DIAGNOSTIC CHANGE: Try removing overflow-hidden from this div if the issue persists *** */}
         <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden" style={{ willChange: 'transform' }}>
           <div
             className="absolute inset-0 flex items-center justify-center z-10 px-4 sm:px-6 lg:px-8 xl:px-14"
@@ -101,7 +107,7 @@ export default function PinnedScrollSection() {
               opacity: titleOpacity,
               pointerEvents: titlePointerEvents,
               transition: 'opacity 0.25s ease-out',
-              willChange: 'opacity'
+              willChange: 'opacity, transform'
             }}
           >
             <motion.div
@@ -120,34 +126,29 @@ export default function PinnedScrollSection() {
                 <span>Every</span>
 
                 {/* White Box Between Words */}
+                {/* White Box Between Words */}
                 <span
                   className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
                   style={{
                     width: '160px',
                     height: '70px',
-                    // *** CHANGE 1: Simplify transform and combine with translateZ for a guaranteed layer ***
-                    transform: `translateZ(0) scale(${roundedBoxScale})`,
+                    transform: `scale(${boxScale}) translateZ(0)`,
                     transformOrigin: 'center center',
+                    transition: isIOS
+                      ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
+                      : 'transform 0.15s ease-out, opacity 0.15s ease-out',
                     opacity: boxOpacity,
-                    // *** CHANGE 2: Force a new compositor layer with a neutral filter. This is a key fix for Safari. ***
-                    filter: 'contrast(1) brightness(1)',
-                    // *** CHANGE 3: Explicitly tell the browser what will change. ***
-                    willChange: 'transform, filter, opacity',
+                    willChange: 'transform, opacity',
                     WebkitBackfaceVisibility: 'hidden',
                     backfaceVisibility: 'hidden',
+                    WebkitFontSmoothing: 'antialiased',
+                    MozOsxFontSmoothing: 'grayscale',
+                    imageRendering: 'crisp-edges'
                   }}
                 >
-                  <div 
-                    className="w-full h-full flex items-center justify-center p-3"
-                    // *** CHANGE 4: Improve text rendering inside the scaled element ***
-                    style={{
-                      textRendering: 'geometricPrecision',
-                      WebkitFontSmoothing: 'antialiased',
-                      MozOsxFontSmoothing: 'grayscale',
-                    }}
-                  >
+                  <div className="w-full h-full flex items-center justify-center p-3">
                     <div className="text-gray-900 text-xs leading-tight text-center">
-                      <div className="glancyr-medium mb-1">Choose the Plan That n </div>
+                      <div className="glancyr-medium mb-1">Choose the Plan That nwq </div>
                       <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
                     </div>
                   </div>
@@ -179,7 +180,6 @@ export default function PinnedScrollSection() {
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-[0.95fr_1.1fr_0.95fr] gap-2 md:gap-6">
-                {/* ... (rest of your pricing cards) ... */}
                 <div className="bg-white rounded-[20px] p-4 md:p-8 shadow-md hover:shadow-xl transition-all duration-300">
                   <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Standard</h3>
                   <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
@@ -254,9 +254,11 @@ export default function PinnedScrollSection() {
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
+
         </div>
       </section>
     </div>
