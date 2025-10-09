@@ -126,58 +126,25 @@ export default function PinnedScrollSection() {
                 <span>Every</span>
 
                 {/* White Box Between Words */}
-         <span className="relative inline-block w-[160px] h-[70px]">
-  {/* Background box (scaled) */}
-  <span
-    className="absolute inset-0 bg-[#f1f5f8] rounded-lg shadow-2xl"
-    style={{
-      transform: `scale(${boxScale})`,
-      transformOrigin: 'center center',
-      opacity: boxOpacity,
-      transition: isIOS
-        ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
-        : 'transform 0.15s ease-out, opacity 0.15s ease-out',
-      backfaceVisibility: 'hidden',
-      WebkitBackfaceVisibility: 'hidden',
-      willChange: 'transform, opacity',
-    }}
-  ></span>
-
-  {/* Text (scaled independently) */}
-  <span
-    className="relative z-10 flex items-center justify-center w-full h-full p-3"
-    style={{
-      transform: `scale(${boxScale})`,
-      transformOrigin: 'center center',
-      WebkitFontSmoothing: 'antialiased',
-      textRendering: 'optimizeLegibility',
-      backfaceVisibility: 'hidden',
-      filter: 'blur(0)',
-    }}
-  ><svg
-  width="160"
-  height="70"
-  viewBox="0 0 160 70"
-  style={{ transform: `scale(${boxScale})`, transformOrigin: 'center center' }}
+         <span
+  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl"
+  style={{
+    width: `${160 * boxScale}px`,
+    height: `${70 * boxScale}px`,
+    fontSize: `${10 * boxScale}px`, // scale text via font size
+    lineHeight: `${12 * boxScale}px`,
+    transition: 'all 0.2s ease-out',
+    opacity: boxOpacity,
+    WebkitFontSmoothing: 'antialiased',
+    textRendering: 'optimizeLegibility',
+  }}
 >
-  <rect width="160" height="70" rx="14" fill="#f1f5f8" />
-  <text
-    x="50%"
-    y="50%"
-    dominantBaseline="middle"
-    textAnchor="middle"
-    fontSize="10"
-    fill="#111"
-  >
-    Choose the Plan That
-  </text>
-</svg>
-
-    <div className="text-gray-900 text-xs leading-tight text-center">
-      <div className="glancyr-medium mb-1">Choose the Plan That ss</div>
-      <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
+  <div className="w-full h-full flex items-center justify-center p-3">
+    <div className="text-gray-900 text-center">
+      <div className="glancyr-medium mb-1">Choose the Plan That</div>
+      <div className="glancyr-medium">Fits Your Growth</div>
     </div>
-  </span>
+  </div>
 </span>
 
 
