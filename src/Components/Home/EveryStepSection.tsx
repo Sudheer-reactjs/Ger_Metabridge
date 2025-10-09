@@ -126,41 +126,36 @@ export default function PinnedScrollSection() {
                 <span>Every</span>
 
                 {/* White Box Between Words */}
-               <span
-  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden will-change-transform"
+              <span
+  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
   style={{
     width: '160px',
     height: '70px',
     transform: `scale(${boxScale})`,
     transformOrigin: 'center center',
-    transition: isIOS
-      ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
-      : 'transform 0.15s ease-out, opacity 0.15s ease-out',
     opacity: boxOpacity,
-
-    // --- Key anti-blur fixes ---
     WebkitTransform: `translateZ(0) scale(${boxScale})`,
-    WebkitFontSmoothing: 'antialiased',
     backfaceVisibility: 'hidden',
-    WebkitBackfaceVisibility: 'hidden',
-    transformStyle: 'preserve-3d',
-    isolation: 'isolate', // <-- Helps Safari re-rasterize cleanly
-    willChange: 'transform, opacity'
+    isolation: 'isolate',
   }}
 >
-  <div
-    className="w-full h-full flex items-center justify-center p-3"
-    style={{
-      WebkitFontSmoothing: 'antialiased',
-      transform: 'translateZ(0)', // helps nested text remain crisp
-    }}
-  >
-    <div className="text-gray-900 text-xs leading-tight text-center">
-      <div className="glancyr-medium mb-1">Choose the Plan That</div>
-      <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
+  <div className="w-full h-full flex items-center justify-center p-3">
+    {/* Keep text crisp by isolating from scale */}
+    <div
+      style={{
+        transform: 'scale(1)',
+        WebkitFontSmoothing: 'antialiased',
+        backfaceVisibility: 'hidden',
+      }}
+    >
+      <div className="text-gray-900 text-xs leading-tight text-center">
+        <div className="glancyr-medium mb-1">Choose the Plan That</div>
+        <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
+      </div>
     </div>
   </div>
 </span>
+
 
 
                 <span>Step</span>
