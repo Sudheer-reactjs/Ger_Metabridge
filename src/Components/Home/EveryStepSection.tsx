@@ -154,7 +154,25 @@ export default function PinnedScrollSection() {
       backfaceVisibility: 'hidden',
       filter: 'blur(0)',
     }}
+  ><svg
+  width="160"
+  height="70"
+  viewBox="0 0 160 70"
+  style={{ transform: `scale(${boxScale})`, transformOrigin: 'center center' }}
+>
+  <rect width="160" height="70" rx="14" fill="#f1f5f8" />
+  <text
+    x="50%"
+    y="50%"
+    dominantBaseline="middle"
+    textAnchor="middle"
+    fontSize="10"
+    fill="#111"
   >
+    Choose the Plan That
+  </text>
+</svg>
+
     <div className="text-gray-900 text-xs leading-tight text-center">
       <div className="glancyr-medium mb-1">Choose the Plan That ss</div>
       <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
