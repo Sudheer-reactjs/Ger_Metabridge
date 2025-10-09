@@ -126,7 +126,7 @@ export default function PinnedScrollSection() {
                 <span>Every</span>
 
                 {/* White Box Between Words */}
-           <span
+      <span
                   className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
                   style={{
                     width: '160px',
@@ -137,15 +137,13 @@ export default function PinnedScrollSection() {
                       ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
                       : 'transform 0.15s ease-out, opacity 0.15s ease-out',
                     opacity: boxOpacity,
-                    willChange: 'transform, opacity',
                     WebkitBackfaceVisibility: 'hidden',
                     backfaceVisibility: 'hidden',
-                    WebkitFontSmoothing: 'antialiased',
-                    MozOsxFontSmoothing: 'grayscale',
-                    WebkitTransform: `translate3d(0, 0, 0) scale(${boxScale})`,
-                    perspective: 1000
+                    WebkitFontSmoothing: 'subpixel-antialiased',
+                    imageRendering: 'crisp-edges',
+                    WebkitTransform: `translate3d(0, 0, 0) scale(${boxScale})`
                   }}
-                >
+                > 
                   <div className="w-full h-full flex items-center justify-center p-3">
                     <div className="text-gray-900 text-xs leading-tight text-center">
                       <div className="glancyr-medium mb-1">Choose the Plan That </div>
