@@ -129,8 +129,8 @@ export default function PinnedScrollSection() {
 <span
   className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl"
   style={{
-    width: `${160 * boxScale}px`,
-    height: `${70 * boxScale}px`,
+    width: `${100 * boxScale}px`,
+    height: `${50 * boxScale}px`,
     fontSize: `${5 * boxScale}px`, 
     transition: 'all 0.2s ease-out',
     opacity: boxOpacity,
