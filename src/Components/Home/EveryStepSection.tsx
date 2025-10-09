@@ -87,6 +87,9 @@ export default function PinnedScrollSection() {
   const contentPointerEvents = contentOpacity > 0.05 ? 'auto' : 'none';
   const titlePointerEvents = titleOpacity > 0.05 ? 'auto' : 'none';
 
+  // *** CHANGE 1: Round the scale value to prevent sub-pixel blur ***
+  const roundedBoxScale = useMemo(() => Math.round(boxScale * 100) / 100, [boxScale]);
+
   return (
     <div className="">
       <section
@@ -126,37 +129,35 @@ export default function PinnedScrollSection() {
                 <span>Every</span>
 
                 {/* White Box Between Words */}
-              <span
-  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
-  style={{
-    width: '160px',
-    height: '70px',
-    transform: `scale(${boxScale})`,
-    transformOrigin: 'center center',
-    opacity: boxOpacity,
-    WebkitTransform: `translateZ(0) scale(${boxScale})`,
-    backfaceVisibility: 'hidden',
-    isolation: 'isolate',
-  }}
->
-  <div className="w-full h-full flex items-center justify-center p-3">
-    {/* Keep text crisp by isolating from scale */}
-    <div
-      style={{
-        transform: 'scale(1)',
-        WebkitFontSmoothing: 'antialiased',
-        backfaceVisibility: 'hidden',
-      }}
-    >
-      <div className="text-gray-900 text-xs leading-tight text-center">
-        <div className="glancyr-medium mb-1">Choose the Plan That</div>
-        <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
-      </div>
-    </div>
-  </div>
-</span>
-
-
+                <span
+                  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
+                  style={{
+                    width: '160px',
+                    height: '70px',
+                    // *** CHANGE 2: Use translate3d for hardware acceleration and the rounded scale value ***
+                    transform: `translate3d(0, 0, 0) scale3d(${roundedBoxScale}, ${roundedBoxScale}, 1)`,
+                    transformOrigin: 'center center',
+                    // *** CHANGE 3: REMOVE the CSS transition. The JS rAF loop handles the animation. ***
+                    // transition: isIOS
+                    //   ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
+                    //   : 'transform 0.15s ease-out, opacity 0.15s ease-out',
+                    opacity: boxOpacity,
+                    // *** CHANGE 4: Be more specific with will-change ***
+                    willChange: 'transform',
+                    WebkitBackfaceVisibility: 'hidden',
+                    backfaceVisibility: 'hidden',
+                    // The WebkitTransform prefix is redundant with the standard 'transform' property in modern browsers,
+                    // but we keep it for maximum compatibility if needed.
+                    // WebkitTransform: `translate3d(0, 0, 0) scale3d(${roundedBoxScale}, ${roundedBoxScale}, 1)`
+                  }}
+                >
+                  <div className="w-full h-full flex items-center justify-center p-3">
+                    <div className="text-gray-900 text-xs leading-tight text-center">
+                      <div className="glancyr-medium mb-1">Choose the Plan That </div>
+                      <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
+                    </div>
+                  </div>
+                </span>
 
                 <span>Step</span>
               </h2>
