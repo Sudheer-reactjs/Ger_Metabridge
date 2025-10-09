@@ -153,7 +153,7 @@ export default function PinnedScrollSection() {
                 >
                   <div className="w-full h-full flex items-center justify-center p-3">
                     <div className="text-gray-900 text-xs leading-tight text-center">
-                      <div className="glancyr-medium mb-1">Choose the Plan That </div>
+                      <div className="glancyr-medium mb-1">Choose the Plan That s </div>
                       <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
                     </div>
                   </div>
