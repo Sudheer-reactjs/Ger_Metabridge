@@ -4,256 +4,256 @@ import { motion, useInView, useAnimation } from "framer-motion";
 const isIOS = typeof navigator !== 'undefined' && /iP(hone|ad|od)/.test(navigator.platform) || (typeof navigator !== 'undefined' && /Mac/.test(navigator.platform) && 'ontouchend' in document);
 
 export default function PinnedScrollSection() {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const ref = useRef<HTMLDivElement | null>(null);
-  const isInView = useInView(ref, { once: false, amount: 0.3 });
-  const controls = useAnimation();
+    const [scrollProgress, setScrollProgress] = useState(0);
+    const sectionRef = useRef<HTMLElement | null>(null);
+    const ref = useRef<HTMLDivElement | null>(null);
+    const isInView = useInView(ref, { once: false, amount: 0.3 });
+    const controls = useAnimation();
 
-  useEffect(() => {
-    if (isInView) {
-      controls.start("visible");
-    } else {
-      const t = setTimeout(() => {
-        if (!isInView) controls.start("hidden");
-      }, 300);
-      return () => clearTimeout(t);
-    }
-  }, [isInView, controls]);
+    useEffect(() => {
+        if (isInView) {
+            controls.start("visible");
+        } else {
+            const t = setTimeout(() => {
+                if (!isInView) controls.start("hidden");
+            }, 300);
+            return () => clearTimeout(t);
+        }
+    }, [isInView, controls]);
 
-  // rAF-throttled scroll handler for smoother iOS updates
-  useEffect(() => {
-    let ticking = false;
+    // rAF-throttled scroll handler for smoother iOS updates
+    useEffect(() => {
+        let ticking = false;
 
-    const computeProgress = () => {
-      if (!sectionRef.current) return;
+        const computeProgress = () => {
+            if (!sectionRef.current) return;
 
-      const section = sectionRef.current;
-      const rect = section.getBoundingClientRect();
-      const sectionHeight = section.offsetHeight;
-      const windowHeight = window.innerHeight;
+            const section = sectionRef.current;
+            const rect = section.getBoundingClientRect();
+            const sectionHeight = section.offsetHeight;
+            const windowHeight = window.innerHeight;
 
-      let progress: number;
-      if (rect.top <= 0 && rect.bottom >= windowHeight) {
-        progress = Math.abs(rect.top) / (sectionHeight - windowHeight);
-      } else if (rect.top > 0) {
-        progress = 0;
-      } else {
-        progress = 1;
-      }
+            let progress: number;
+            if (rect.top <= 0 && rect.bottom >= windowHeight) {
+                progress = Math.abs(rect.top) / (sectionHeight - windowHeight);
+            } else if (rect.top > 0) {
+                progress = 0;
+            } else {
+                progress = 1;
+            }
 
-      // clamp and set once per frame
-      setScrollProgress(Math.min(Math.max(progress, 0), 1));
-      ticking = false;
-    };
+            // clamp and set once per frame
+            setScrollProgress(Math.min(Math.max(progress, 0), 1));
+            ticking = false;
+        };
 
-    const onScroll = () => {
-      if (!ticking) {
-        ticking = true;
+        const onScroll = () => {
+            if (!ticking) {
+                ticking = true;
+                requestAnimationFrame(computeProgress);
+            }
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        // initial compute
         requestAnimationFrame(computeProgress);
-      }
-    };
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    // initial compute
-    requestAnimationFrame(computeProgress);
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+        };
+    }, []);
 
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-    };
-  }, []);
+    // Easing: slightly softer on iOS
+    const easeOutQuad = (t: number) => 1 - (1 - t) * (1 - t);
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 1);
+    const ease = isIOS ? easeOutQuad : easeOutCubic;
 
-  // Easing: slightly softer on iOS
-  const easeOutQuad = (t: number) => 1 - (1 - t) * (1 - t);
-  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 1);
-  const ease = isIOS ? easeOutQuad : easeOutCubic;
+    // Mobile-aware max scale to prevent giant bitmap on iPhone
+    const maxScale = useMemo(() => {
+        const w = typeof window !== 'undefined' ? window.innerWidth : 1024;
+        return w < 640 ? 4 : 10;
+    }, []);
 
-  // Mobile-aware max scale to prevent giant bitmap on iPhone
-  const maxScale = useMemo(() => {
-    const w = typeof window !== 'undefined' ? window.innerWidth : 1024;
-    return w < 640 ? 4 : 10;
-  }, []);
+    const eased = ease(scrollProgress);
 
-  const eased = ease(scrollProgress);
+    // Derived values with gentler thresholds to avoid flicker
+    const boxScale = 1 + (eased * maxScale);
+    const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.18)); // slightly longer fade
+    const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.6) / 0.22) : 0; // smoother ramp
+    const titleOpacity = scrollProgress < 0.32 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.32) / 0.24));
+    const bgWhite = scrollProgress > 1;
 
-  // Derived values with gentler thresholds to avoid flicker
-  const boxScale = 1 + (eased * maxScale);
-  const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.18)); // slightly longer fade
-  const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.6) / 0.22) : 0; // smoother ramp
-  const titleOpacity = scrollProgress < 0.32 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.32) / 0.24));
-  const bgWhite = scrollProgress > 1;
+    // Debounced pointerEvents toggling to avoid rapid flip-flop
+    const contentPointerEvents = contentOpacity > 0.05 ? 'auto' : 'none';
+    const titlePointerEvents = titleOpacity > 0.05 ? 'auto' : 'none';
 
-  // Debounced pointerEvents toggling to avoid rapid flip-flop
-  const contentPointerEvents = contentOpacity > 0.05 ? 'auto' : 'none';
-  const titlePointerEvents = titleOpacity > 0.05 ? 'auto' : 'none';
-
-  return (
-    <div className="">
-      <section
-        ref={sectionRef}
-        className="relative h-[300vh]"
-        style={{
-          backgroundColor: bgWhite ? '#f1f5f8' : '#0b1016',
-          transition: 'background-color 0.3s ease-out',
-          // Helps iOS compositing for sticky region
-          WebkitTransform: 'translateZ(0)',
-          willChange: 'background-color'
-        }}
-      >
-        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden" style={{ willChange: 'transform' }}>
-          <div
-            className="absolute inset-0 flex items-center justify-center z-10 px-4 sm:px-6 lg:px-8 xl:px-14"
-            style={{
-              opacity: titleOpacity,
-              pointerEvents: titlePointerEvents,
-              transition: 'opacity 0.25s ease-out',
-              willChange: 'opacity, transform'
-            }}
-          >
-            <motion.div
-              className="text-center"
-              ref={ref}
-              initial="hidden"
-              animate={controls}
-              variants={{
-                hidden: { opacity: 0, y: 200 },
-                visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 16, duration: 0.9 } }
-              }}
+    return (
+        <div className="">
+            <section
+                ref={sectionRef}
+                className="relative h-[300vh]"
+                style={{
+                    backgroundColor: bgWhite ? '#f1f5f8' : '#0b1016',
+                    transition: 'background-color 0.3s ease-out',
+                    // Helps iOS compositing for sticky region
+                    WebkitTransform: 'translateZ(0)',
+                    willChange: 'background-color'
+                }}
             >
-              <h2 className="text-3xl md:text-5xl lg:text-6xl text-white leading-none flex flex-wrap items-center justify-center gap-3">
-                <span>The Right Solution For</span>
-                <span className="block w-full"></span>
-                <span>Every</span>
+                <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden" style={{ willChange: 'transform' }}>
+                    <div
+                        className="absolute inset-0 flex items-center justify-center z-10 px-4 sm:px-6 lg:px-8 xl:px-14"
+                        style={{
+                            opacity: titleOpacity,
+                            pointerEvents: titlePointerEvents,
+                            transition: 'opacity 0.25s ease-out',
+                            willChange: 'opacity, transform'
+                        }}
+                    >
+                        <motion.div
+                            className="text-center"
+                            ref={ref}
+                            initial="hidden"
+                            animate={controls}
+                            variants={{
+                                hidden: { opacity: 0, y: 200 },
+                                visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 16, duration: 0.9 } }
+                            }}
+                        >
+                            <h2 className="text-3xl md:text-5xl lg:text-6xl text-white leading-none flex   flex-col md:flex-wrap items-center justify-center gap-3">
+                                <span>The Right Solution For</span>
+                                <span className="block w-full"></span>
+                                <span>Every</span>
 
-                {/* White Box Between Words */}
-<span
-  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl"
-  style={{
-    width: `${100 * boxScale}px`,
-    height: `${50 * boxScale}px`,
-    fontSize: `${5 * boxScale}px`, 
-    transition: 'all 0.2s ease-out',
-    opacity: boxOpacity,
-    WebkitFontSmoothing: 'antialiased',
-    textRendering: 'optimizeLegibility',
-  }}
->
-  <div className="w-full h-full flex items-center justify-center p-3">
-    <div className="text-gray-900 text-center">
-      <div className="glancyr-medium mb-1">Choose the Plan That</div>
-      <div className="glancyr-medium">Fits Your Growth</div>
-    </div>
-  </div>
-</span>
+                                {/* White Box Between Words */}
+                                <span
+                                    className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl"
+                                    style={{
+                                        width: `${100 * boxScale}px`,
+                                        height: `${50 * boxScale}px`,
+                                        fontSize: `${5 * boxScale}px`,
+                                        transition: 'all 0.2s ease-out',
+                                        opacity: boxOpacity,
+                                        WebkitFontSmoothing: 'antialiased',
+                                        textRendering: 'optimizeLegibility',
+                                    }}
+                                >
+                                    <div className="w-full h-full flex items-center justify-center p-3">
+                                        <div className="text-gray-900 text-center">
+                                            <div className="glancyr-medium mb-1">Choose the Plan That</div>
+                                            <div className="glancyr-medium">Fits Your Growth</div>
+                                        </div>
+                                    </div>
+                                </span>
 
 
-                <span>Step</span>
-              </h2>
-            </motion.div>
-          </div>
-
-          {/* Full Screen Content */}
-          <div
-            className="absolute pt-[90px] inset-0 z-30 bg-[#f1f5f8] flex items-center justify-center px-4 sm:px-6 lg:px-8 xl:px-14 overflow-y-auto rounded-[21.95px]"
-            style={{
-              opacity: contentOpacity,
-              pointerEvents: contentPointerEvents,
-              transition: 'opacity 0.25s ease-out',
-              willChange: 'opacity',
-              WebkitTransform: 'translateZ(0)'
-            }}
-          >
-            <div className="w-full max-w-[968px]">
-              <h2 className="text-center text-3xl md:text-5xl lg:text-6xl text-[#0B1013] max-w-2xl m-auto leading-normal flex flex-wrap items-center justify-center gap-3">
-                Upgrade Your Limits, Not Your Budget
-              </h2>  
-
-              <p className="text-center text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mt-4 mb-4 md:mb-9">
-                Not everyone has the same goals. That's why we give you access to different account levels.
-              </p>
-
-              <div className="grid grid-cols-1 md:grid-cols-[0.95fr_1.1fr_0.95fr] gap-2 md:gap-6">
-                <div className="bg-white rounded-[20px] p-4 md:p-8 shadow-md hover:shadow-xl transition-all duration-300">
-                  <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Standard</h3>
-                  <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
-                    Affordable Foundation For Individuals And Small Teams.
-                  </p>
-                  <div className="space-y-1">
-                    <div className="flex items-start gap-3">
-                      <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
-                      </svg>
-                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                        Ideal for testing and early campaigns
-                      </p>
+                                <span>Step</span>
+                            </h2>
+                        </motion.div>
                     </div>
-                    <div className="flex items-start gap-3">
-                      <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
-                      </svg>
-                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                        Simple setup with essential features
-                      </p>
+
+                    {/* Full Screen Content */}
+                    <div
+                        className="absolute pt-[90px] inset-0 z-30 bg-[#f1f5f8] flex items-center justify-center px-4 sm:px-6 lg:px-8 xl:px-14 overflow-y-auto rounded-[21.95px]"
+                        style={{
+                            opacity: contentOpacity,
+                            pointerEvents: contentPointerEvents,
+                            transition: 'opacity 0.25s ease-out',
+                            willChange: 'opacity',
+                            WebkitTransform: 'translateZ(0)'
+                        }}
+                    >
+                        <div className="w-full max-w-[968px]">
+                            <h2 className="text-center text-3xl md:text-5xl lg:text-6xl text-[#0B1013] max-w-2xl m-auto leading-normal flex flex-wrap items-center justify-center gap-3">
+                                Upgrade Your Limits, Not Your Budget
+                            </h2>
+
+                            <p className="text-center text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mt-4 mb-4 md:mb-9">
+                                Not everyone has the same goals. That's why we give you access to different account levels.
+                            </p>
+
+                            <div className="grid grid-cols-1 md:grid-cols-[0.95fr_1.1fr_0.95fr] gap-2 md:gap-6">
+                                <div className="bg-white rounded-[20px] p-4 md:p-8 shadow-md hover:shadow-xl transition-all duration-300">
+                                    <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Standard</h3>
+                                    <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
+                                        Affordable Foundation For Individuals And Small Teams.
+                                    </p>
+                                    <div className="space-y-1">
+                                        <div className="flex items-start gap-3">
+                                            <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
+                                                Ideal for testing and early campaigns
+                                            </p>
+                                        </div>
+                                        <div className="flex items-start gap-3">
+                                            <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
+                                                Simple setup with essential features
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white rounded-[20px] p-4 md:p-12 shadow-md hover:shadow-xl transition-all duration-300">
+                                    <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Premium</h3>
+                                    <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
+                                        Enhanced performance with advanced reliability and reach.
+                                    </p>
+                                    <div className="space-y-1">
+                                        <div className="flex items-start gap-3">
+                                            <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
+                                                Higher limits for scaling operations
+                                            </p>
+                                        </div>
+                                        <div className="flex items-start gap-3">
+                                            <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
+                                                Priority support for smoother workflows
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white rounded-[20px] p-4 md:p-8 shadow-md hover:shadow-xl transition-all duration-300">
+                                    <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Elite</h3>
+                                    <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
+                                        Exclusive access, unmatched trust, and priority service.
+                                    </p>
+                                    <div className="space-y-1">
+                                        <div className="flex items-start gap-3">
+                                            <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
+                                                Whitelisted for maximum deliverability
+                                            </p>
+                                        </div>
+                                        <div className="flex items-start gap-3">
+                                            <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
+                                                Dedicated support and fast-track features
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
-                  </div>
+
                 </div>
-
-                <div className="bg-white rounded-[20px] p-4 md:p-12 shadow-md hover:shadow-xl transition-all duration-300">
-                  <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Premium</h3>
-                  <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
-                    Enhanced performance with advanced reliability and reach.
-                  </p>
-                  <div className="space-y-1">
-                    <div className="flex items-start gap-3">
-                      <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
-                      </svg>
-                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                        Higher limits for scaling operations
-                      </p>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
-                      </svg>
-                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                        Priority support for smoother workflows
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-[20px] p-4 md:p-8 shadow-md hover:shadow-xl transition-all duration-300">
-                  <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Elite</h3>
-                  <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
-                    Exclusive access, unmatched trust, and priority service.
-                  </p>
-                  <div className="space-y-1">
-                    <div className="flex items-start gap-3">
-                      <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
-                      </svg>
-                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                        Whitelisted for maximum deliverability
-                      </p>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
-                      </svg>
-                      <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                        Dedicated support and fast-track features
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
+            </section>
         </div>
-      </section>
-    </div>
-  );
+    );
 }
