@@ -126,23 +126,23 @@ export default function PinnedScrollSection() {
                 <span>Every</span>
 
                 {/* White Box Between Words */}
-                <span
-                  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
-                  style={{
-                    width: '160px',
-                    height: '70px',
-                    transform: `scale(${boxScale})`,
-                    transformOrigin: 'center center',
-                    transition: isIOS
-                      ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
-                      : 'transform 0.15s ease-out, opacity 0.15s ease-out',
-                    opacity: boxOpacity,
-                    willChange: 'transform, opacity',
-                    WebkitBackfaceVisibility: 'hidden',
-                    backfaceVisibility: 'hidden',
-                    WebkitTransform: `translateZ(0) scale(${boxScale})`
-                  }}
-                >
+           <span
+  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
+  style={{
+    width: '160px',
+    height: '70px',
+    transform: `translate3d(0, 0, 0) scale3d(${boxScale}, ${boxScale}, 1)`,
+    transformOrigin: 'center center',
+    transition: isIOS
+      ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
+      : 'transform 0.15s ease-out, opacity 0.15s ease-out',
+    opacity: boxOpacity,
+    willChange: 'transform, opacity',
+    WebkitBackfaceVisibility: 'hidden',
+    backfaceVisibility: 'hidden',
+    WebkitTransform: `translate3d(0, 0, 0) scale3d(${boxScale}, ${boxScale}, 1)`
+  }}
+>
                   <div className="w-full h-full flex items-center justify-center p-3">
                     <div className="text-gray-900 text-xs leading-tight text-center">
                       <div className="glancyr-medium mb-1">Choose the Plan That </div>
