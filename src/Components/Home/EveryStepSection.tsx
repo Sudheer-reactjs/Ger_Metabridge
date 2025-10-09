@@ -131,7 +131,7 @@ export default function PinnedScrollSection() {
                                     style={{
                                         width: `${100 * boxScale}px`,
                                         height: `${50 * boxScale}px`,
-                                        fontSize: `${5 * boxScale}px`,
+                                        fontSize: `${6 * boxScale}px`,
                                         transition: 'all 0.2s ease-out',
                                         opacity: boxOpacity,
                                         WebkitFontSmoothing: 'antialiased',
