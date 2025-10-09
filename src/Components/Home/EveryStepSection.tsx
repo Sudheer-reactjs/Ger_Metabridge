@@ -65,7 +65,7 @@ export default function PinnedScrollSection() {
 
   // Easing: slightly softer on iOS
   const easeOutQuad = (t: number) => 1 - (1 - t) * (1 - t);
-  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 1);
   const ease = isIOS ? easeOutQuad : easeOutCubic;
 
   // Mobile-aware max scale to prevent giant bitmap on iPhone
@@ -79,9 +79,9 @@ export default function PinnedScrollSection() {
   // Derived values with gentler thresholds to avoid flicker
   const boxScale = 1 + (eased * maxScale);
   const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.18)); // slightly longer fade
-  const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.62) / 0.22) : 0; // smoother ramp
+  const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.6) / 0.22) : 0; // smoother ramp
   const titleOpacity = scrollProgress < 0.32 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.32) / 0.24));
-  const bgWhite = scrollProgress > 0.72;
+  const bgWhite = scrollProgress > 1;
 
   // Debounced pointerEvents toggling to avoid rapid flip-flop
   const contentPointerEvents = contentOpacity > 0.05 ? 'auto' : 'none';
@@ -131,8 +131,7 @@ export default function PinnedScrollSection() {
   style={{
     width: `${160 * boxScale}px`,
     height: `${70 * boxScale}px`,
-    fontSize: `${10 * boxScale}px`, // scale text via font size
-    lineHeight: `${12 * boxScale}px`,
+    fontSize: `${5 * boxScale}px`, 
     transition: 'all 0.2s ease-out',
     opacity: boxOpacity,
     WebkitFontSmoothing: 'antialiased',
