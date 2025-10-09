@@ -124,7 +124,7 @@ export default function PinnedScrollSection() {
                                 <span className="block leading-normal md:hidden">The Right Solution For Every Step</span>
                                 <span className="hidden md:block">The Right Solution For</span>
                                 <span className="block w-full"></span>
-                               <span className="hidden md:block">Every</span>
+                                <span className="hidden md:block">Every</span>
 
                                 {/* White Box Between Words */}
                                 <span
@@ -155,7 +155,7 @@ export default function PinnedScrollSection() {
 
                     {/* Full Screen Content */}
                     <div
-                        className="absolute pt-[90px] inset-0 z-30 bg-[#f1f5f8] flex items-center justify-center px-4 sm:px-6 lg:px-8 xl:px-14 overflow-y-auto rounded-[21.95px]"
+                        className="absolute pt-[90px] inset-0 z-30 bg-[#f1f5f8] flex items-center justify-center px-4 sm:px-6 lg:px-8 xl:px-14 overflow-y-auto rounded-t-[21px]"
                         style={{
                             opacity: contentOpacity,
                             pointerEvents: contentPointerEvents,
