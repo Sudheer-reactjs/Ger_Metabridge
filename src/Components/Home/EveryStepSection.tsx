@@ -126,39 +126,40 @@ export default function PinnedScrollSection() {
                 <span>Every</span>
 
                 {/* White Box Between Words */}
-                <span className="relative inline-block w-[160px] h-[70px]">
-  {/* Scaled background box */}
-  <span
-    className="absolute inset-0 bg-[#f1f5f8] rounded-lg shadow-2xl"
-    style={{
-      transform: `scale(${boxScale})`,
-      transformOrigin: 'center center',
-      opacity: boxOpacity,
-      transition: isIOS
-        ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
-        : 'transform 0.15s ease-out, opacity 0.15s ease-out',
-      willChange: 'transform, opacity',
-      backfaceVisibility: 'hidden',
-      WebkitBackfaceVisibility: 'hidden',
-      isolation: 'isolate',
-      pointerEvents: 'none',
-    }}
-  ></span>
+                <span
+  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
+  style={{
+    width: '160px',
+    height: '70px',
+    transform: `scale(${boxScale})`,
+    transformOrigin: 'center center',
+    transition: isIOS
+      ? 'transform 0.22s ease-out, opacity 0.22s ease-out'
+      : 'transform 0.15s ease-out, opacity 0.15s ease-out',
+    opacity: boxOpacity,
 
-  {/* Text stays independent (not scaled) */}
-  <span
-    className="relative z-10 flex items-center justify-center w-full h-full p-3"
-    style={{
-      WebkitFontSmoothing: 'antialiased',
-      backfaceVisibility: 'hidden',
-      transform: 'translateZ(0)',
-    }}
-  >
-    <div className="text-gray-900 text-xs leading-tight text-center">
-      <div className="glancyr-medium mb-1">Choose the Plan That test</div>
+    // ✅ Key fixes for Safari text blur
+    filter: 'blur(0)', // ← forces vector re-render
+    WebkitFontSmoothing: 'antialiased',
+    textRendering: 'optimizeLegibility',
+    backfaceVisibility: 'hidden',
+    WebkitBackfaceVisibility: 'hidden',
+    willChange: 'transform, opacity',
+  }}
+>
+  <div className="w-full h-full flex items-center justify-center p-3">
+    <div
+      className="text-gray-900 text-xs leading-tight text-center"
+      style={{
+        filter: 'blur(0)', // also apply here to reinforce
+        WebkitFontSmoothing: 'antialiased',
+        textRendering: 'optimizeLegibility',
+      }}
+    >
+      <div className="glancyr-medium mb-1">Choose the Plan That d</div>
       <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
     </div>
-  </span>
+  </div>
 </span>
 
 
