@@ -120,10 +120,11 @@ export default function PinnedScrollSection() {
                                 visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 16, duration: 0.9 } }
                             }}
                         >
-                            <h2 className="text-3xl md:text-5xl lg:text-6xl text-white leading-none flex   flex-col md:flex-wrap items-center justify-center gap-3">
-                                <span>The Right Solution For</span>
+                            <h2 className="text-3xl md:text-5xl lg:text-6xl text-white leading-none flex flex-wrap items-center justify-center gap-3">
+                                <span className="block leading-normal md:hidden">The Right Solution For Every Step</span>
+                                <span className="hidden md:block">The Right Solution For</span>
                                 <span className="block w-full"></span>
-                                <span>Every</span>
+                               <span className="hidden md:block">Every</span>
 
                                 {/* White Box Between Words */}
                                 <span
@@ -147,7 +148,7 @@ export default function PinnedScrollSection() {
                                 </span>
 
 
-                                <span>Step</span>
+                                <span className="hidden md:block">Step</span>
                             </h2>
                         </motion.div>
                     </div>
