@@ -126,39 +126,25 @@ export default function PinnedScrollSection() {
                 <span>Every</span>
 
                 {/* White Box Between Words */}
-              <span className="relative inline-block w-[160px] h-[70px]">
-  {/* Scaled background only */}
-  <span
-    className="absolute inset-0 bg-[#f1f5f8] rounded-lg shadow-2xl"
-    style={{
-      transform: `scale(${boxScale})`,
-      transformOrigin: 'center center',
-      opacity: boxOpacity,
-      transition: 'transform 0.2s ease-out, opacity 0.2s ease-out',
-      backfaceVisibility: 'hidden',
-      WebkitBackfaceVisibility: 'hidden',
-      pointerEvents: 'none',
-      willChange: 'transform, opacity',
-    }}
-  ></span>
-
-  {/* Scaled text independently */}
-  <span
-    className="relative z-10 flex items-center justify-center w-full h-full p-3"
-    style={{
-      transform: `scale(${boxScale})`,
-      transformOrigin: 'center center',
-      WebkitFontSmoothing: 'antialiased',
-      textRendering: 'optimizeLegibility',
-      backfaceVisibility: 'hidden',
-      filter: 'blur(0)',
-    }}
-  >
-    <div className="text-gray-900 text-xs leading-tight text-center">
+<span
+  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl"
+  style={{
+    width: `${160 * boxScale}px`,
+    height: `${70 * boxScale}px`,
+    fontSize: `${10 * boxScale}px`, // scale text via font size
+    lineHeight: `${12 * boxScale}px`,
+    transition: 'all 0.2s ease-out',
+    opacity: boxOpacity,
+    WebkitFontSmoothing: 'antialiased',
+    textRendering: 'optimizeLegibility',
+  }}
+>
+  <div className="w-full h-full flex items-center justify-center p-3">
+    <div className="text-gray-900 text-center">
       <div className="glancyr-medium mb-1">Choose the Plan That</div>
-      <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
+      <div className="glancyr-medium">Fits Your Growth</div>
     </div>
-  </span>
+  </div>
 </span>
 
 
