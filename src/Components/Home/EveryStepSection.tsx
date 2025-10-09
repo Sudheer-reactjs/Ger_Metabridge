@@ -130,7 +130,7 @@ export default function PinnedScrollSection() {
 
                 {/* White Box Between Words */}
                 <span
-                  className="inline-block bg-[#f1f5f8] rounded-lg shadow-2xl overflow-hidden"
+                  className="inline-block bg-[#f1f5f8] rounded-lg  overflow-hidden"
                   style={{
                     width: '160px',
                     height: '70px',
@@ -153,7 +153,7 @@ export default function PinnedScrollSection() {
                 >
                   <div className="w-full h-full flex items-center justify-center p-3">
                     <div className="text-gray-900 text-xs leading-tight text-center">
-                      <div className="glancyr-medium mb-1">Choose the Plan That s </div>
+                      <div className="glancyr-medium mb-1">Choose the Plan That ss </div>
                       <div className="glancyr-medium text-[10px]">Fits Your Growth</div>
                     </div>
                   </div>
