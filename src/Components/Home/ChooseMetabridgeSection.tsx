@@ -14,31 +14,31 @@ const ChooseMetabridgeSection = () => {
         } else {
             setTimeout(() => {
                 if (!isInView) controls.start("hidden");
-            }, 300);
+            }, 100);
         }
     }, [isInView, controls]);
 
 
     return (
-        <div className="w-full overflow-hidden my-12 md:my-24">
+        <div className="w-full overflow-hidden mb-12 mb:my-24 pt-12 md:pt-24">
             <div className="max-w-[1250px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-14">
                 <motion.div className="relative bg-[#b2cad9] rounded-[32px] py-10 md:py-16 px-5 md:px-12 flex flex-col lg:flex-row lg:space-x-12 space-y-6 lg:space-y-0"
                     ref={ref}
                     initial="hidden"
                     animate={controls}
                     variants={{
-                        hidden: { opacity: 0, y: 200 },
-                        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 14, duration: 0.8 } }
+                        hidden: { opacity: 0, y: 100 },
+                        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 12, duration: 0.5 } }
                     }}
                 >
 
                     <motion.div
                         className="w-full lg:w-[40%]"
-                        initial={{ opacity: 0, x: -200, rotate: -5 }}
+                        initial={{ opacity: 0, x: -100, rotate: -5 }}
                         animate={controls}
                         variants={{
-                            hidden: { opacity: 0, x: -200, rotate: -5 },
-                            visible: { opacity: 1, x: 0, rotate: 0, transition: { type: "spring", stiffness: 100, damping: 14, duration: 1, delay: 0.5 } }
+                            hidden: { opacity: 0, x: -100, rotate: -5 },
+                            visible: { opacity: 1, x: 0, rotate: 0, transition: { type: "spring", stiffness: 100, damping: 12, duration: 1, delay: 0.5 } }
                         }}
                     >
                         <h2 className="text-[#051420] text-[28px] md:text-[40px] capitalize">
@@ -55,11 +55,11 @@ const ChooseMetabridgeSection = () => {
 
                     <motion.div
                         className="w-full lg:w-[60%]"
-                        initial={{ opacity: 0, x: 200, rotate: 5 }}
+                        initial={{ opacity: 0, x: 100, rotate: 5 }}
                         animate={controls}
                         variants={{
-                            hidden: { opacity: 0, x: 200, rotate: 5 },
-                            visible: { opacity: 1, x: 0, rotate: 0, transition: { type: "spring", stiffness: 100, damping: 14, duration: 1, delay: 0.5 } }
+                            hidden: { opacity: 0, x: 100, rotate: 5 },
+                            visible: { opacity: 1, x: 0, rotate: 0, transition: { type: "spring", stiffness: 100, damping: 12, duration: 1, delay: 0.5 } }
                         }}
                     >
                         <img

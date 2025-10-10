@@ -16,12 +16,11 @@ export default function PinnedScrollSection() {
         } else {
             const t = setTimeout(() => {
                 if (!isInView) controls.start("hidden");
-            }, 300);
+            }, 100);
             return () => clearTimeout(t);
         }
     }, [isInView, controls]);
 
-    // rAF-throttled scroll handler for smoother iOS updates
     useEffect(() => {
         let ticking = false;
 
@@ -42,7 +41,6 @@ export default function PinnedScrollSection() {
                 progress = 1;
             }
 
-            // clamp and set once per frame
             setScrollProgress(Math.min(Math.max(progress, 0), 1));
             ticking = false;
         };
@@ -55,7 +53,6 @@ export default function PinnedScrollSection() {
         };
 
         window.addEventListener('scroll', onScroll, { passive: true });
-        // initial compute
         requestAnimationFrame(computeProgress);
 
         return () => {
@@ -63,12 +60,10 @@ export default function PinnedScrollSection() {
         };
     }, []);
 
-    // Easing: slightly softer on iOS
     const easeOutQuad = (t: number) => 1 - (1 - t) * (1 - t);
     const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 1);
     const ease = isIOS ? easeOutQuad : easeOutCubic;
 
-    // Mobile-aware max scale to prevent giant bitmap on iPhone
     const maxScale = useMemo(() => {
         const w = typeof window !== 'undefined' ? window.innerWidth : 1024;
         return w < 640 ? 4 : 10;
@@ -76,14 +71,12 @@ export default function PinnedScrollSection() {
 
     const eased = ease(scrollProgress);
 
-    // Derived values with gentler thresholds to avoid flicker
     const boxScale = 1 + (eased * maxScale);
-    const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.18)); // slightly longer fade
-    const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.6) / 0.22) : 0; // smoother ramp
+    const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.18)); 
+    const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.6) / 0.22) : 0; 
     const titleOpacity = scrollProgress < 0.32 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.32) / 0.24));
     const bgWhite = scrollProgress > 1;
 
-    // Debounced pointerEvents toggling to avoid rapid flip-flop
     const contentPointerEvents = contentOpacity > 0.05 ? 'auto' : 'none';
     const titlePointerEvents = titleOpacity > 0.05 ? 'auto' : 'none';
 
@@ -95,7 +88,6 @@ export default function PinnedScrollSection() {
                 style={{
                     backgroundColor: bgWhite ? '#f1f5f8' : '#0b1016',
                     transition: 'background-color 0.3s ease-out',
-                    // Helps iOS compositing for sticky region
                     WebkitTransform: 'translateZ(0)',
                     willChange: 'background-color'
                 }}
@@ -116,8 +108,8 @@ export default function PinnedScrollSection() {
                             initial="hidden"
                             animate={controls}
                             variants={{
-                                hidden: { opacity: 0, y: 200 },
-                                visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 16, duration: 0.9 } }
+                                hidden: { opacity: 0, y: 100 },
+                                visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 12, duration: 0.5 } }
                             }}
                         >
                             <h2 className="text-3xl md:text-5xl lg:text-6xl text-white leading-none flex flex-wrap items-center justify-center gap-3">

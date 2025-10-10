@@ -58,7 +58,7 @@ const TabSection = () => {
         } else {
             setTimeout(() => {
                 if (!isInView) controls.start("hidden");
-            }, 300);
+            }, 100);
         }
     }, [isInView, controls]);
 
@@ -70,8 +70,8 @@ const TabSection = () => {
                     initial="hidden"
                     animate={controls}
                     variants={{
-                        hidden: { opacity: 0, y: 200 },
-                        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 14, duration: 0.8 } }
+                        hidden: { opacity: 0, y: 100 },
+                        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 12, duration: 0.5 } }
                     }}
                 >
                     <div className="self-stretch flex flex-col justify-start items-start gap-2 w-full max-w-[1117px] m-auto pb-6 md:pb-10">
@@ -111,9 +111,9 @@ const TabSection = () => {
                                 className="grid grid-cols-[1.5fr] md:grid-cols-[0.6fr_1.5fr] gap-4"
                             >
                                 <motion.div
-                                    initial={{ opacity: 0, x: -200, rotate: -5 }}
+                                    initial={{ opacity: 0, x: -100, rotate: -5 }}
                                     animate={{ opacity: 1, x: 0, rotate: 0 }}
-                                    transition={{ type: "spring", stiffness: 100, damping: 14, duration: 1, delay: 0.5 }}
+                                    transition={{ type: "spring", stiffness: 100, damping: 12, duration: 1, delay: 0.5 }}
                                     className="bg-[#b2cad9] rounded-[20px] p-5 flex flex-col justify-between gap-5"
                                 >
                                     <h4 className="self-stretch justify-start text-[#0b1016] text-xl capitalize">01</h4>
@@ -127,9 +127,9 @@ const TabSection = () => {
 
                                 <motion.div
                                     key={`tab-0-image`}
-                                    initial={{ opacity: 0, x: 200, rotate: 5 }}
+                                    initial={{ opacity: 0, x: 100, rotate: 5 }}
                                     animate={{ opacity: 1, x: 0, rotate: 0 }}
-                                    transition={{ type: "spring", stiffness: 100, damping: 14, duration: 1, delay: 0.5 }}
+                                    transition={{ type: "spring", stiffness: 100, damping: 12, duration: 1, delay: 0.5 }}
                                     className="relative bg-[#1e2b36] rounded-[20px] overflow-hidden pt-12 md:pt-20 px-5 md:px-8 pb-0 flex flex-col justify-end gap-5"
                                     style={{
                                         backgroundImage: `url(${DotBg})`,
@@ -149,9 +149,9 @@ const TabSection = () => {
                                 className="grid grid-cols-[1.5fr] md:grid-cols-[0.6fr_1.5fr] gap-4"
                             >
                                 <motion.div
-                                    initial={{ opacity: 0, x: -200, rotate: -5 }}
+                                    initial={{ opacity: 0, x: -100, rotate: -5 }}
                                     animate={{ opacity: 1, x: 0, rotate: 0 }}
-                                    transition={{ type: "spring", stiffness: 100, damping: 14, duration: 1, delay: 0.5 }}
+                                    transition={{ type: "spring", stiffness: 100, damping: 12, duration: 1, delay: 0.5 }}
                                     className="bg-[#b2cad9] rounded-[20px] p-5 flex flex-col justify-between gap-5"
                                 >
                                     <h4 className="self-stretch justify-start text-[#0b1016] text-xl capitalize">02</h4>
@@ -165,9 +165,9 @@ const TabSection = () => {
 
                                 <motion.div
                                     key={`tab-1-image`}
-                                    initial={{ opacity: 0, x: 200, rotate: 5 }}
+                                    initial={{ opacity: 0, x: 100, rotate: 5 }}
                                     animate={{ opacity: 1, x: 0, rotate: 0 }}
-                                    transition={{ type: "spring", stiffness: 100, damping: 14, duration: 1, delay: 0.5 }}
+                                    transition={{ type: "spring", stiffness: 100, damping: 12, duration: 1, delay: 0.5 }}
                                     className="relative bg-[#1e2b36] rounded-[20px] overflow-hidden py-12 md:py-20 px-5 md:px-8 flex flex-col justify-between gap-5"
                                     style={{
                                         backgroundImage: `url(${DotBg})`,
@@ -187,9 +187,9 @@ const TabSection = () => {
                                 className="grid grid-cols-[1.5fr] md:grid-cols-[0.6fr_1.5fr] gap-4"
                             >
                                 <motion.div
-                                    initial={{ opacity: 0, x: -200, rotate: -5 }}
+                                    initial={{ opacity: 0, x: -100, rotate: -5 }}
                                     animate={{ opacity: 1, x: 0, rotate: 0 }}
-                                    transition={{ type: "spring", stiffness: 100, damping: 14, duration: 1, delay: 0.5 }}
+                                    transition={{ type: "spring", stiffness: 100, damping: 12, duration: 1, delay: 0.5 }}
                                     className="bg-[#b2cad9] rounded-[20px] p-5 flex flex-col justify-between gap-5"
                                 >
                                     <h4 className="self-stretch justify-start text-[#0b1016] text-xl capitalize">03</h4>
@@ -203,9 +203,9 @@ const TabSection = () => {
 
                                 <motion.div
                                     key={`tab-2-image`}
-                                    initial={{ opacity: 0, x: 200, rotate: 5 }}
+                                    initial={{ opacity: 0, x: 100, rotate: 5 }}
                                     animate={{ opacity: 1, x: 0, rotate: 0 }}
-                                    transition={{ type: "spring", stiffness: 100, damping: 14, duration: 1, delay: 0.5 }}
+                                    transition={{ type: "spring", stiffness: 100, damping: 12, duration: 1, delay: 0.5 }}
                                     className="relative bg-[#1e2b36] rounded-[20px] overflow-hidden pt-12  pb-0 flex flex-col justify-end gap-5"
                                     style={{
                                         backgroundImage: `url(${DotBg})`,
@@ -227,9 +227,9 @@ const TabSection = () => {
                                 className="grid grid-cols-[1.5fr] md:grid-cols-[0.6fr_1.5fr] gap-4"
                             >
                                 <motion.div
-                                    initial={{ opacity: 0, x: -200, rotate: -5 }}
+                                    initial={{ opacity: 0, x: -100, rotate: -5 }}
                                     animate={{ opacity: 1, x: 0, rotate: 0 }}
-                                    transition={{ type: "spring", stiffness: 100, damping: 14, duration: 1, delay: 0.5 }}
+                                    transition={{ type: "spring", stiffness: 100, damping: 12, duration: 1, delay: 0.5 }}
                                     className="bg-[#b2cad9] rounded-[20px] p-5 flex flex-col justify-between gap-5"
                                 >
                                     <h4 className="self-stretch justify-start text-[#0b1016] text-xl capitalize">04</h4>
@@ -243,9 +243,9 @@ const TabSection = () => {
 
                                 <motion.div
                                     key={`tab-3-image`}
-                                    initial={{ opacity: 0, x: 200, rotate: 5 }}
+                                    initial={{ opacity: 0, x: 100, rotate: 5 }}
                                     animate={{ opacity: 1, x: 0, rotate: 0 }}
-                                    transition={{ type: "spring", stiffness: 100, damping: 14, duration: 1, delay: 0.5 }}
+                                    transition={{ type: "spring", stiffness: 100, damping: 12, duration: 1, delay: 0.5 }}
                                     className="relative bg-[#1e2b36] rounded-[20px] overflow-hidden py-12 md:py-20 px-5 md:px-8 flex flex-col justify-between gap-5"
                                     style={{
                                         backgroundImage: `url(${DotBg})`,
