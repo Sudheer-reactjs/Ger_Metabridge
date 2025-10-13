@@ -69,7 +69,7 @@ img{
     transition: opacity 0.26s ease-out;
     filter: drop-shadow(-8px -10px 46px #0000005f);
     backdrop-filter: brightness(1.1) blur(8px);
-    -webkit-backdrop-filter: brightness(1.1) blur(8px); /* Safari prefix */
+    -webkit-backdrop-filter: brightness(0.001) blur(.001px); /* Safari prefix */
 }
 
 .card::before {
