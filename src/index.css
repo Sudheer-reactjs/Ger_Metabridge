@@ -83,60 +83,6 @@ img{
 }
  
 
-/* ========== GLASS LAYERS ========== */
-/* .glass-filter {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  backdrop-filter: blur(0px);
-  filter: url(#lg-dist);
-  isolation: isolate;
-}
-
-.glass-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: rgba(255, 255, 255, 0.25);
-}
-
-.glass-specular {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  border-radius: inherit;
-  overflow: hidden; 
-}
-
-.glass-content {
-  position: relative;
-  z-index: 3;
-}
-
-.glass-content--inline {
-  padding: 0.25rem 2rem 0.25rem 0.75rem;
-  flex: 1 1 auto;
-  justify-content: space-between;
-} */
-
-.header-card {
-    width: 100%;
-    overflow: hidden;
-    border-radius: inherit;
-    transition: opacity 0.26s ease-out;
-    backdrop-filter: brightness(1.1) 
-        blur(4px)
-        url(#displacementFilter);
-} 
-
-.header-card::before {
-    content: ''; 
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-    background: rgb(255 255 255 / 11%);
-}
 @media(max-width: 768px){
   .animate-marquee-reverse {
   animation: marquee-reverse 8s linear infinite;
