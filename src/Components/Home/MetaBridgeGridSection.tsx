@@ -23,7 +23,7 @@ const MetaBridgeGridSection = () => {
 
 
   return (
-    <section className="w-full  bg-[#f1f5f8] rounded-b-[21px] overflow-hidden ">
+    <section className="w-full  bg-[#f1f5f8] rounded-b-[21px] overflow-hidden relative z-10 ">
       <div className="w-full overflow-hidden my-12 md:my-24">
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-14 ">
         {/* Heading */}
@@ -39,7 +39,7 @@ const MetaBridgeGridSection = () => {
         >
           <div
 
-            className="self-stretch flex flex-col justify-start items-start gap-2 w-full m-auto pb- md:pb-8">
+            className="self-stretch flex flex-col justify-start items-start gap-2 w-full m-auto pb-5 md:pb-8">
             <h2 className="self-stretch justify-start text-[#051420] text-[28px] md:text-[40px] capitalize">
               With MetaBridge you already know what you're up against
             </h2>
@@ -47,7 +47,7 @@ const MetaBridgeGridSection = () => {
 
           {/* Grid Section */}
           <div
-            className="grid grid-cols-1 md:grid-cols-[_1fr_1fr] gap-2 md:gap-6 ">
+            className="grid grid-cols-1 md:grid-cols-[_1fr_1fr] gap-5 md:gap-6 ">
             <div
               className="px-5 md:px-10 py-10 md:py-[53px] rounded-[30px]"
               style={{

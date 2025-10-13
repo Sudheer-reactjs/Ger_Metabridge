@@ -3,6 +3,7 @@ import EveryStep from "../Components/Home/EveryStepSection";
 import ImagePinnedSection from "../Components/Home/ImagePinnedSection";
 import MetaBridgeGridSection from "../Components/Home/MetaBridgeGridSection";
 import TabSection from "../Components/Home/TabSection";
+import TailorMadeSection from "../Components/Home/TailorMadeSection";
 import VideoSection from "../Components/Home/VideoSection";
 
 
@@ -13,8 +14,9 @@ const Home = () => {
       <ChooseMetabridgeSection />
       <TabSection />
       <EveryStep />
-      <MetaBridgeGridSection /> 
+      <MetaBridgeGridSection />
       <ImagePinnedSection />
+      <TailorMadeSection />
     </>
   );
 }
