@@ -6,16 +6,14 @@ import Footer from "../Components/Footer";
 
 export default function   AppRoutes() { 
   return (
-    <Router>
-      <div className="overflow-y-hidden">
-        <Header />
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+    <Router >
+      <Header />
+      <main>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+      </main>
+      <Footer />
     </Router>
   );
 }
