@@ -67,18 +67,14 @@ img{
     width: 100%;
     overflow: hidden;
     border-radius: inherit;
+    position: relative;
     transition: opacity 0.26s ease-out;
-    filter: drop-shadow(-8px -10px 46px #0000005f);
-    backdrop-filter: brightness(1.1) blur(8px);
-    -webkit-backdrop-filter: brightness(1.1) blur(8px);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px) brightness(1.15) saturate(1.2);
+    -webkit-backdrop-filter: blur(4px) brightness(1.15) saturate(1.2);
+    filter: drop-shadow(-8px -10px 46px rgba(0, 0, 0, 0.37));
 }
 
-/* For browsers that support SVG filters in backdrop-filter */
-@supports (backdrop-filter: url(#displacementFilter)) {
-    .card {
-        backdrop-filter: brightness(1.1) blur(2px) url(#displacementFilter);
-    }
-}
 @media(max-width: 768px){
   .animate-marquee-reverse {
   animation: marquee-reverse 8s linear infinite;
