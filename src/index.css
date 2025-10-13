@@ -62,26 +62,22 @@ img{
   animation: marquee-reverse 15s linear infinite;
 }
 
+
 .card {
     width: 100%;
     overflow: hidden;
     border-radius: inherit;
     transition: opacity 0.26s ease-out;
     filter: drop-shadow(-8px -10px 46px #0000005f);
-    backdrop-filter: brightness(1.1) blur(3px);
-    -webkit-backdrop-filter:brightness(1.1) blur(3px); /* Safari prefix */
+    backdrop-filter: brightness(1.1) blur(8px);
+    -webkit-backdrop-filter: brightness(1.1) blur(8px);
 }
 
-.card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-    /* -webkit-box-shadow: inset 6px 6px 0px -6px rgba(255, 255, 255, 0.2), 
-                        inset 0 0 8px 1px rgba(255, 255, 255, 0.2);
-    box-shadow: inset 6px 6px 0px -6px rgba(255, 255, 255, 0.2), 
-                inset 0 0 8px 1px rgba(255, 255, 255, 0.2); */
+/* For browsers that support SVG filters in backdrop-filter */
+@supports (backdrop-filter: url(#displacementFilter)) {
+    .card {
+        backdrop-filter: brightness(1.1) blur(2px) url(#displacementFilter);
+    }
 }
 @media(max-width: 768px){
   .animate-marquee-reverse {
