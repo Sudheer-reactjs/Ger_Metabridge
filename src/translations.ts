@@ -1,6 +1,6 @@
 const translations = {
   en: {
-    heroTitle: "Welcome to Our Sitesss",
+    heroTitle: "[Built by Advertisers for Advertisers]",
     heroDesc: "We offer premium services for your needs.",
     aboutTitle: "About Us",
     aboutDesc: "We’re passionate about delivering quality and value.",
@@ -8,7 +8,7 @@ const translations = {
     contactDesc: "Get in touch for collaborations or inquiries.",
   },
   it: {
-    heroTitle: "Benvenuto nel nostro sitogg",
+    heroTitle: "[Costruito da Advertiser per Advertiser]",
     heroDesc: "Offriamo servizi premium per le tue esigenze.",
     aboutTitle: "Chi siamo",
     aboutDesc: "Siamo appassionati di fornire qualità e valore.",
