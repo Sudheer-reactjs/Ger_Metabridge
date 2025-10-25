@@ -11,8 +11,8 @@ import translations from "../translations";
 
 
 const Home = () => {
-    const country = useDetectCountry();
-  const lang = !country ? "en" : country === "IT" ? "it" : "en";
+   const country = useDetectCountry();
+  const lang = country === "IT" ? "it" : "en";
   const t = translations[lang];
   return (
     <>
