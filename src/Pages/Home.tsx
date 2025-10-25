@@ -6,11 +6,17 @@ import TabSection from "../Components/Home/TabSection";
 import TailorMadeSection from "../Components/Home/TailorMadeSection";
 import VideoSection from "../Components/Home/VideoSection";
 
+import useDetectCountry from "../Hooks/useDetectCountry";
+import translations from "../translations";
+
 
 const Home = () => {
+    const country = useDetectCountry();
+  const lang = !country ? "en" : country === "IT" ? "it" : "en";
+  const t = translations[lang];
   return (
     <>
-      <VideoSection />
+      <VideoSection t={t} />
       <ChooseMetabridgeSection />
       <TabSection />
       <EveryStep />
