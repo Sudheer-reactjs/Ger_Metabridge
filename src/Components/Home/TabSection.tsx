@@ -12,18 +12,33 @@ import SupportTab from "../../Assets/support-tab.png";
 import MarqueeTextCard from "./MarqueeTextCard";
 import MarqueeTextCard2 from "./MarqueeTextCard2";
 
-const tabs = [
-    { title: "Request Access", icon: <img src={RequestAccess} alt="Tab 1" className="w-[30px] lg:w-[60px]" /> },
-    { title: "Quick Setup", icon: <img src={QuickSetup} alt="Tab 2" className="w-[30px] lg:w-[60px]" /> },
-    { title: "Credit Line", icon: <img src={CreditLine} alt="Tab 3" className="w-[30px] lg:w-[60px]" /> },
-    { title: "24/7 Support", icon: <img src={Support} alt="Tab 4" className="w-[30px] lg:w-[60px]" /> }
-];
+type Props = {
+  t: {
+    tabSectionTitle: string;
+    tabNameFirst: string;
+    tabFirstDesc: string; 
+    tabNameSecond: string;
+    tabSecondDesc: string;
+    tabNameThird: string;
+    tabThirdDesc: string;
+    tabNameFourth: string;
+    tabFourthDesc: string;
+  };
+};
 
-const TabSection = () => {
+const TabSection = ({ t }: Props) => {
     const [activeTab, setActiveTab] = useState(0);
     const [progress, setProgress] = useState(0);
     const intervalRef = useRef<number | null>(null);
     const autoSwitchInterval = 10000;
+
+
+    const tabs = [
+    { title: t.tabNameFirst, icon: <img src={RequestAccess} alt="Tab 1" className="w-[30px] lg:w-[60px]" /> },
+    { title: t.tabNameSecond, icon: <img src={QuickSetup} alt="Tab 2" className="w-[30px] lg:w-[60px]" /> },
+    { title: t.tabNameThird, icon: <img src={CreditLine} alt="Tab 3" className="w-[30px] lg:w-[60px]" /> },
+    { title: t.tabNameFourth, icon: <img src={Support} alt="Tab 4" className="w-[30px] lg:w-[60px]" /> }
+];
 
     const resetProgress = (tabIndex: number) => {
         setActiveTab(tabIndex);
@@ -76,7 +91,7 @@ const TabSection = () => {
                 >
                     <div className="self-stretch flex flex-col justify-start items-start gap-2 w-full max-w-[1117px] m-auto pb-6 md:pb-10">
                         <h2 className="self-stretch text-center justify-start text-[#f1f5f8] text-[32px] md:text-[55px] font-medium  leading-[42px] md:leading-[74px]">
-                            Fast setup, continuous growth
+                           {t.tabSectionTitle}
                             </h2>
                         <p className="self-stretch text-center justify-start text-[#c0d5df] text-sm md:text-lg font-normal  leading-[24px] md:leading-[30px]">
                             As certified Italian Official Meta partners, we ensure your campaigns run smoothly without interruptions. Enjoy instant top-ups and eliminate restrictions, allowing you to focus solely on maximizing your profits.
@@ -118,9 +133,9 @@ const TabSection = () => {
                                 >
                                     <h4 className="self-stretch justify-start text-[#0b1016] text-xl capitalize">01</h4>
                                     <div className="self-stretch inline-flex flex-col justify-start items-start gap-[9px]">
-                                        <h3 className="self-stretch justify-start text-[#0b1016] text-xl md:text-2xl capitalize">Request Access</h3>
+                                        <h3 className="self-stretch justify-start text-[#0b1016] text-xl md:text-2xl capitalize">{t.tabNameFirst}</h3>
                                         <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                                            Reach out and share your goals. We’ll listen carefully, assess your needs, and recommend the most effective account solution.
+                                           {t.tabFirstDesc}
                                         </p>
                                     </div>
                                 </motion.div>
@@ -156,9 +171,9 @@ const TabSection = () => {
                                 >
                                     <h4 className="self-stretch justify-start text-[#0b1016] text-xl capitalize">02</h4>
                                     <div className="self-stretch inline-flex flex-col justify-start items-start gap-[9px]">
-                                        <h3 className="self-stretch justify-start text-[#0b1016] text-xl md:text-2xl capitalize">Quick Setup</h3>
+                                        <h3 className="self-stretch justify-start text-[#0b1016] text-xl md:text-2xl capitalize">{t.tabNameSecond}</h3>
                                         <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                                            We deliver certified BM accounts ready to use instantly, so you can launch campaigns without waiting or losing momentum.
+                                            {t.tabSecondDesc}
                                         </p>
                                     </div>
                                 </motion.div>
@@ -194,9 +209,9 @@ const TabSection = () => {
                                 >
                                     <h4 className="self-stretch justify-start text-[#0b1016] text-xl capitalize">03</h4>
                                     <div className="self-stretch inline-flex flex-col justify-start items-start gap-[9px]">
-                                        <h3 className="self-stretch justify-start text-[#0b1016] text-xl md:text-2xl capitalize">Credit Line</h3>
+                                        <h3 className="self-stretch justify-start text-[#0b1016] text-xl md:text-2xl capitalize">{t.tabNameThird}</h3>
                                         <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                                            Our flexible credit line lets you invest without limits, scale your campaigns immediately, and pay transparently with no bureaucracy.
+                                            {t.tabThirdDesc}
                                         </p>
                                     </div>
                                 </motion.div>
@@ -234,9 +249,9 @@ const TabSection = () => {
                                 >
                                     <h4 className="self-stretch justify-start text-[#0b1016] text-xl capitalize">04</h4>
                                     <div className="self-stretch inline-flex flex-col justify-start items-start gap-[9px]">
-                                        <h3 className="self-stretch justify-start text-[#0b1016] text-xl md:text-2xl capitalize">24/7 Support</h3>
+                                        <h3 className="self-stretch justify-start text-[#0b1016] text-xl md:text-2xl capitalize">{t.tabNameFourth}</h3>
                                         <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                                            Our team is always available, day and night, to answer questions, solve issues, and keep campaigns running smoothly.
+                                           {t.tabFourthDesc}
                                         </p>
                                     </div>
                                 </motion.div>

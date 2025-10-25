@@ -2,8 +2,14 @@ import { motion, useInView, useAnimation } from "framer-motion";
 import { useEffect, useRef } from "react";
 import MetaEcosystem from "../../Assets/meta-ecosystem.png";
 import ContactButton from "../ContactButton";
+type Props = {
+  t: {
+    chooseMetabridgeTitle: string;
+    chooseMetabridgeDesc: string; 
+  };
+};
 
-const ChooseMetabridgeSection = () => {
+const ChooseMetabridgeSection = ({ t }: Props) => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: false, amount: 0.3 });
     const controls = useAnimation();
@@ -42,11 +48,10 @@ const ChooseMetabridgeSection = () => {
                         }}
                     >
                         <h2 className="text-[#051420] text-[28px] md:text-[40px] capitalize">
-                            Why waste time when you can leave right away?
+                           {t.chooseMetabridgeTitle} 
                         </h2>
                         <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mt-4">
-                            We know how much every hour lost with a blocked account or a ridiculous spending limit costs.
-                            That's why we offer you ready-made, solid and certified assets, so you can focus on what matters: your campaigns.
+                           {t.chooseMetabridgeDesc} 
                         </p>
                         <div className="flex items-center space-x-4 mt-5 md:mt-7">
                             <ContactButton />

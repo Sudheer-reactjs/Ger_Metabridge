@@ -2,9 +2,13 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, useInView, useAnimation } from "framer-motion";
 
 const isIOS = typeof navigator !== 'undefined' && /iP(hone|ad|od)/.test(navigator.platform) || (typeof navigator !== 'undefined' && /Mac/.test(navigator.platform) && 'ontouchend' in document);
-
-export default function PinnedScrollSection() {
-    const [scrollProgress, setScrollProgress] = useState(0);
+type Props = {
+  t: {
+  everyStepTitle: string;
+  };
+};
+export default function PinnedScrollSection({ t }: Props) {
+    const [scrollProgress, setScrollProgress] = useState(0); 
     const sectionRef = useRef<HTMLElement | null>(null);
     const ref = useRef<HTMLDivElement | null>(null);
     const isInView = useInView(ref, { once: false, amount: 0.3 });

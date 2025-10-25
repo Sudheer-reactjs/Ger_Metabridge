@@ -17,9 +17,9 @@ const Home = () => {
   return (
     <>
       <VideoSection t={t} />
-      <ChooseMetabridgeSection />
-      <TabSection />
-      <EveryStep />
+      <ChooseMetabridgeSection t={t} />
+      <TabSection t={t} /> 
+      <EveryStep t={t} />
       <MetaBridgeGridSection />
       <ImagePinnedSection />
       <TailorMadeSection />
