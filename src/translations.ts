@@ -1,6 +1,6 @@
 const translations = {
   en: {
-    heroTitle: "Welcome to Our Sitess",
+    heroTitle: "Welcome to Our Sitesss",
     heroDesc: "We offer premium services for your needs.",
     aboutTitle: "About Us",
     aboutDesc: "We’re passionate about delivering quality and value.",
