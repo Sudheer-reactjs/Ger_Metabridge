@@ -6,9 +6,13 @@ import CreditLine from "../../Assets/credit-line.png";
 import Support from "../../Assets/support.png";
 import DotBg from "../../Assets/dot-bg.png";
 import RequestAccessTab from "../../Assets/request-access-tab.png";
+import RequestAccessTabIT from "../../Assets/request-access-tab-it.png";
 import QuickSetupTab from "../../Assets/quick-setup-tab.png";
+import QuickSetupTabIT from "../../Assets/quick-setup-tab-it.png";
 import CreditLineTab from "../../Assets/credit-line-tab.png";
+import CreditLineTabIT from "../../Assets/credit-line-tab-it.png";
 import SupportTab from "../../Assets/support-tab.png";
+import SupportTabIT from "../../Assets/support-tab-it.png";
 import MarqueeTextCard from "./MarqueeTextCard";
 import MarqueeTextCard2 from "./MarqueeTextCard2";
 
@@ -26,6 +30,7 @@ type Props = {
     tabFourthDesc: string;
     marqueeTexts: string[];
     marqueeTexts2: string[];
+    lang: "en" | "it";
   };
 };
 
@@ -156,7 +161,7 @@ const TabSection = ({ t }: Props) => {
                                         backgroundSize: "cover",
                                     }}
                                 >
-                                    <img className="w-full max-w-[603px] m-auto" src={RequestAccessTab} alt="Request Access" />
+                                    <img className="w-full max-w-[603px] m-auto" src={t.lang === "it" ? RequestAccessTabIT : RequestAccessTab} alt="Request Access" />
                                 </motion.div>
                             </motion.div>
                         )}
@@ -194,7 +199,7 @@ const TabSection = ({ t }: Props) => {
                                         backgroundSize: "cover",
                                     }}
                                 >
-                                    <img className="w-full max-w-[656px] m-auto" src={QuickSetupTab} alt="Quick Setup" />
+                                    <img className="w-full max-w-[656px] m-auto" src={t.lang === "it" ? QuickSetupTabIT : QuickSetupTab} alt="Quick Setup" />
                                 </motion.div>
                             </motion.div>
                         )}
@@ -234,7 +239,7 @@ const TabSection = ({ t }: Props) => {
                                 >
                                     <MarqueeTextCard items={t.marqueeTexts}/>
                                     <MarqueeTextCard2 items={t.marqueeTexts2}/>
-                                    <img className="w-full max-w-[603px] m-auto px-5 md:px-8 pt-4" src={CreditLineTab} alt="Credit Line" />
+                                    <img className="w-full max-w-[603px] m-auto px-5 md:px-8 pt-4" src={t.lang === "it" ? CreditLineTabIT : CreditLineTab} alt="Credit Line" />
                                 </motion.div>
                             </motion.div>
                         )}
@@ -272,7 +277,7 @@ const TabSection = ({ t }: Props) => {
                                         backgroundSize: "cover",
                                     }}
                                 >
-                                    <img className="w-full max-w-[560px] m-auto" src={SupportTab} alt="Support Tab" />
+                                    <img className="w-full max-w-[560px] m-auto" src={t.lang === "it" ? SupportTabIT : SupportTab} alt="Support Tab" />
                                 </motion.div>
                             </motion.div>
                         )}
