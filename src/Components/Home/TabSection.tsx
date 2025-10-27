@@ -15,6 +15,7 @@ import MarqueeTextCard2 from "./MarqueeTextCard2";
 type Props = {
   t: {
     tabSectionTitle: string;
+    tabSectionDec: string;
     tabNameFirst: string;
     tabFirstDesc: string; 
     tabNameSecond: string;
@@ -23,6 +24,8 @@ type Props = {
     tabThirdDesc: string;
     tabNameFourth: string;
     tabFourthDesc: string;
+    marqueeTexts: string[];
+    marqueeTexts2: string[];
   };
 };
 
@@ -90,11 +93,11 @@ const TabSection = ({ t }: Props) => {
                     }}
                 >
                     <div className="self-stretch flex flex-col justify-start items-start gap-2 w-full max-w-[1117px] m-auto pb-6 md:pb-10">
-                        <h2 className="self-stretch text-center justify-start text-[#f1f5f8] text-[32px] md:text-[55px] font-medium  leading-[42px] md:leading-[74px]">
+                        <h2 className="self-stretch text-center justify-start text-[#f1f5f8] text-[32px] md:text-[55px] font-medium  leading-[42px] md:leading-[74px] capitalize">
                            {t.tabSectionTitle}
                             </h2>
                         <p className="self-stretch text-center justify-start text-[#c0d5df] text-sm md:text-lg font-normal  leading-[24px] md:leading-[30px]">
-                            As certified Italian Official Meta partners, we ensure your campaigns run smoothly without interruptions. Enjoy instant top-ups and eliminate restrictions, allowing you to focus solely on maximizing your profits.
+                            {t.tabSectionDec}
                         </p>
                     </div>
                     {/* Tabs */}
@@ -229,8 +232,8 @@ const TabSection = ({ t }: Props) => {
                                         backgroundSize: "cover",
                                     }}
                                 >
-                                    <MarqueeTextCard />
-                                    <MarqueeTextCard2 />
+                                    <MarqueeTextCard items={t.marqueeTexts}/>
+                                    <MarqueeTextCard2 items={t.marqueeTexts2}/>
                                     <img className="w-full max-w-[603px] m-auto px-5 md:px-8 pt-4" src={CreditLineTab} alt="Credit Line" />
                                 </motion.div>
                             </motion.div>

@@ -4,7 +4,18 @@ import GridImage1 from "../../Assets/grid-bg1.jpg";
 import GridImage2 from "../../Assets/grid-bg2.jpg";
 import ContactButton from "../ContactButton";
 
-const MetaBridgeGridSection = () => {
+type MetaProps = {
+  t: {
+    metaBridgeTitle: string;
+    whatYouGetTitle: string;
+    youDontGetTitle: string;
+    whatYouGetList: string[];
+    youDontGetList: string[];
+    contactUsLabel: string;
+  };
+};
+
+const MetaBridgeGridSection  = ({ t }: MetaProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, amount: 0.3 });
   const controls = useAnimation();
@@ -41,7 +52,7 @@ const MetaBridgeGridSection = () => {
 
             className="self-stretch flex flex-col justify-start items-start gap-2 w-full m-auto pb-5 md:pb-8">
             <h2 className="self-stretch justify-start text-[#051420] text-[28px] md:text-[40px] capitalize">
-              With MetaBridge you already know what you're up against
+             {t.metaBridgeTitle}
             </h2>
           </div>
 
@@ -57,16 +68,10 @@ const MetaBridgeGridSection = () => {
               }}
             >
               <h3 className="text-white text-[24px] md:text-[28px] capitalize mb-5">
-                what you get
+                {t.whatYouGetTitle}
               </h3>
               <div className="space-y-3">
-                {[
-                  "instant top-ups",
-                  "stable accounts",
-                  "zero spending limits",
-                  "flexible credit",
-                  "dedicated support.",
-                ].map((text, idx) => (
+               {t.whatYouGetList.map((text, idx) => (
                   <div className="flex items-center gap-3" key={idx}>
                     <svg
                       className="w-6 h-6 text-[#c0d5df] flex-shrink-0"
@@ -99,14 +104,10 @@ const MetaBridgeGridSection = () => {
               }}
             >
               <h3 className="text-white text-[24px] md:text-[28px] capitalize mb-5">
-                You don't get
+                {t.youDontGetTitle}
               </h3>
               <div className="space-y-3">
-                {[
-                  "sudden bans",
-                  "weeks lost with tickets",
-                  "blocks without explanation",
-                ].map((text, idx) => (
+                {t.youDontGetList.map((text, idx) => (
                   <div className="flex items-center gap-3" key={idx}>
                     <svg
                       className="w-6 h-6 text-[#c0d5df] flex-shrink-0"
@@ -134,7 +135,7 @@ const MetaBridgeGridSection = () => {
           <div
             className="flex items-center space-x-4 justify-center mt-6 md:mt-10 "
           >
-            <ContactButton />
+            <ContactButton label={t.contactUsLabel} />
           </div>
         </motion.div>
       </div>

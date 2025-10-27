@@ -3,7 +3,15 @@ import { useEffect, useRef } from "react";
 import TailorMadeImage from "../../Assets/tailor-made-image.png";
 import ContactButton from "../ContactButton";
 
-const TailorMadeSection = () => {
+type ImagePinnedProps = {
+    t: {
+      TailorMadeSectionTitle:string;
+      TailorMadeSectionDesc:string;
+      contactUsLabel:string;
+    };
+  };
+
+const TailorMadeSection = ({ t }: ImagePinnedProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, amount: 0.3 });
   const controls = useAnimation();
@@ -42,15 +50,15 @@ const TailorMadeSection = () => {
               className="grid grid-cols-1 items-center md:grid-cols-[_1fr_1fr] gap-5 md:gap-12 ">
               <div>
                 <h2 className="text-center md:text-left self-stretch justify-start text-[#fff] text-[28px] md:text-[40px] capitalize max-w-xl w-full">
-                  A tailor-made system for media buyers
+                  {t.TailorMadeSectionTitle}
                 </h2>
                 <p className="text-center md:text-left  self-stretch justify-start text-[#c0d5df] text-sm md:text-lg font-normal leading-[24px] md:leading-[30px] max-w-xl w-full">
-                  We are developing a proprietary platform to give you total control over your accounts, expenses, and credits. For now, we manage everything transparently with a simple and clear system.
-                </p>
+                  {t.TailorMadeSectionDesc}
+                  </p>
                 <div
                   className="flex items-start space-x-4 justify-center md:justify-start mt-6 md:mt-7 "
                 >
-                  <ContactButton />
+                  <ContactButton label={t.contactUsLabel} />
                 </div>
               </div>
               {/* Grid 2 */}

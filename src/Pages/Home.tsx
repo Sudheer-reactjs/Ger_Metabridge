@@ -11,18 +11,19 @@ import translations from "../translations";
 
 
 const Home = () => {
-   const country = useDetectCountry();
-  const lang = country === "IT" ? "it" : "en";
-  const t = translations[lang];
+  const country = useDetectCountry();
+  const lang: "en" | "it" = country === "IT" ? "it" : "en";
+  const t = { ...translations[lang], lang };
+  
   return (
     <>
       <VideoSection t={t} />
       <ChooseMetabridgeSection t={t} />
-      <TabSection t={t} /> 
+      <TabSection t={t} />
       <EveryStep t={t} />
-      <MetaBridgeGridSection />
-      <ImagePinnedSection />
-      <TailorMadeSection />
+      <MetaBridgeGridSection t={t} />
+      <ImagePinnedSection t={t} />
+      <TailorMadeSection t={t} />
     </>
   );
 }

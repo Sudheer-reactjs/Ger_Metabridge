@@ -2,13 +2,36 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, useInView, useAnimation } from "framer-motion";
 
 const isIOS = typeof navigator !== 'undefined' && /iP(hone|ad|od)/.test(navigator.platform) || (typeof navigator !== 'undefined' && /Mac/.test(navigator.platform) && 'ontouchend' in document);
-type Props = {
-  t: {
-  everyStepTitle: string;
-  };
+type everyProps = {
+    t: {
+        everyStepTitleDesktop: string;
+        everyStepTitleLeft: string;
+        everyStepTitleRight: string;
+        everyStepTitleMobile: string;
+        everyStepTitleBoxFirst: string;
+        everyStepTitleBoxLast: string;
+        
+        everyStepWhiteBoxTitle: string;
+        everyStepWhiteBoxDesc: string;
+
+        cardFirstTitle: string;
+        cardFirstDesc: string;
+        cardFirstList1: string;
+        cardFirstList2: string;
+
+        cardTwoTitle: string;
+        cardTwotDesc: string;
+        cardTwoList1: string;
+        cardTwoList2: string;
+
+        cardThreeTitle: string;
+        cardThreeDesc: string;
+        cardThreeList1: string;
+        cardThreeList2: string;
+    };
 };
-export default function PinnedScrollSection({ t }: Props) {
-    const [scrollProgress, setScrollProgress] = useState(0); 
+export default function PinnedScrollSection({ t }: everyProps) {
+    const [scrollProgress, setScrollProgress] = useState(0);
     const sectionRef = useRef<HTMLElement | null>(null);
     const ref = useRef<HTMLDivElement | null>(null);
     const isInView = useInView(ref, { once: false, amount: 0.3 });
@@ -76,8 +99,8 @@ export default function PinnedScrollSection({ t }: Props) {
     const eased = ease(scrollProgress);
 
     const boxScale = 1 + (eased * maxScale);
-    const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.18)); 
-    const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.6) / 0.22) : 0; 
+    const boxOpacity = scrollProgress < 0.7 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.7) / 0.18));
+    const contentOpacity = scrollProgress > 0.62 ? Math.min(1, (scrollProgress - 0.6) / 0.22) : 0;
     const titleOpacity = scrollProgress < 0.32 ? 1 : Math.max(0, 1 - ((scrollProgress - 0.32) / 0.24));
     const bgWhite = scrollProgress > 1;
 
@@ -116,11 +139,11 @@ export default function PinnedScrollSection({ t }: Props) {
                                 visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 12, duration: 0.5 } }
                             }}
                         >
-                            <h2 className="text-3xl md:text-5xl lg:text-6xl text-white leading-none flex flex-wrap items-center justify-center gap-3">
-                                <span className="block leading-normal md:hidden">The Right Solution For Every Step</span>
-                                <span className="hidden md:block">The Right Solution For</span>
+                            <h2 className="text-3xl md:text-5xl lg:text-6xl text-white leading-none flex flex-wrap items-center justify-center gap-3 capitalize">
+                                <span className="block leading-normal md:hidden">{t.everyStepTitleMobile}</span>
+                                <span className="hidden md:block">{t.everyStepTitleDesktop}</span>
                                 <span className="block w-full"></span>
-                                <span className="hidden md:block">Every</span>
+                                <span className="hidden md:block">{t.everyStepTitleLeft}</span>
 
                                 {/* White Box Between Words */}
                                 <span
@@ -137,14 +160,14 @@ export default function PinnedScrollSection({ t }: Props) {
                                 >
                                     <div className="w-full h-full flex items-center justify-center p-3">
                                         <div className="text-gray-900 text-center">
-                                            <div className="glancyr-medium mb-1">Choose the Plan That</div>
-                                            <div className="glancyr-medium">Fits Your Growth</div>
+                                            <div className="glancyr-medium mb-1">{t.everyStepTitleBoxFirst}</div>
+                                            <div className="glancyr-medium">{t.everyStepTitleBoxLast}</div>
                                         </div>
                                     </div>
                                 </span>
 
 
-                                <span className="hidden md:block">Step</span>
+                                <span className="hidden md:block">{t.everyStepTitleRight}</span>
                             </h2>
                         </motion.div>
                     </div>
@@ -161,85 +184,85 @@ export default function PinnedScrollSection({ t }: Props) {
                         }}
                     >
                         <div className="w-full max-w-[968px]">
-                            <h2 className="text-center text-3xl md:text-5xl lg:text-6xl text-[#0B1013] max-w-2xl m-auto leading-normal flex flex-wrap items-center justify-center gap-3">
-                                Upgrade Your Limits, Not Your Budget
+                            <h2 className="text-center text-3xl md:text-5xl lg:text-6xl text-[#0B1013] max-w-2xl m-auto leading-normal flex flex-wrap items-center justify-center gap-3 capitalize">
+                                {t.everyStepWhiteBoxTitle}
                             </h2>
 
                             <p className="text-center text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mt-4 mb-4 md:mb-9">
-                                Not everyone has the same goals. That's why we give you access to different account levels.
+                                {t.everyStepWhiteBoxDesc}
                             </p>
 
                             <div className="grid grid-cols-1 md:grid-cols-[0.95fr_1.1fr_0.95fr] gap-2 md:gap-6">
                                 <div className="bg-white rounded-[20px] p-4 md:p-8 shadow-md hover:shadow-xl transition-all duration-300">
-                                    <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Standard</h3>
+                                    <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">{t.cardFirstTitle}</h3>
                                     <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
-                                        Affordable Foundation For Individuals And Small Teams.
+                                        {t.cardFirstDesc}
                                     </p>
                                     <div className="space-y-1">
-                                        <div className="flex items-start gap-3">
-                                            <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="flex items-start gap-2 md:gap-3">
+                                            <svg className="w-4 h-4 md:w-6 md:h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                                             </svg>
                                             <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                                                Ideal for testing and early campaigns
+                                                {t.cardFirstList1}
                                             </p>
                                         </div>
-                                        <div className="flex items-start gap-3">
-                                            <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="flex items-start gap-2 md:gap-3">
+                                            <svg className="w-4 h-4 md:w-6 md:h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                                             </svg>
                                             <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                                                Simple setup with essential features
+                                                {t.cardFirstList2}
                                             </p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="bg-white rounded-[20px] p-4 md:p-12 shadow-md hover:shadow-xl transition-all duration-300">
-                                    <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Premium</h3>
+                                    <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">{t.cardTwoTitle}</h3>
                                     <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
-                                        Enhanced performance with advanced reliability and reach.
+                                        {t.cardTwotDesc}
                                     </p>
                                     <div className="space-y-1">
-                                        <div className="flex items-start gap-3">
-                                            <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="flex items-start gap-2 md:gap-3">
+                                            <svg className="w-4 h-4 md:w-6 md:h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                                             </svg>
                                             <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                                                Higher limits for scaling operations
+                                                {t.cardTwoList1}
                                             </p>
                                         </div>
-                                        <div className="flex items-start gap-3">
-                                            <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="flex items-start gap-2 md:gap-3">
+                                            <svg className="w-4 h-4 md:w-6 md:h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                                             </svg>
                                             <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                                                Priority support for smoother workflows
+                                                {t.cardTwoList2}
                                             </p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="bg-white rounded-[20px] p-4 md:p-8 shadow-md hover:shadow-xl transition-all duration-300">
-                                    <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">Elite</h3>
+                                    <h3 className="text-xl md:text-2xl text-[#051420] leading-none mb-3">{t.cardThreeTitle}</h3>
                                     <p className="text-[#0B1013] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mb-2">
-                                        Exclusive access, unmatched trust, and priority service.
+                                        {t.cardThreeDesc}
                                     </p>
                                     <div className="space-y-1">
-                                        <div className="flex items-start gap-3">
-                                            <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="flex items-start gap-2 md:gap-3">
+                                            <svg className="w-4 h-4 md:w-6 md:h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                                             </svg>
                                             <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                                                Whitelisted for maximum deliverability
+                                                {t.cardThreeList1}
                                             </p>
                                         </div>
-                                        <div className="flex items-start gap-3">
-                                            <svg className="w-6 h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="flex items-start gap-2 md:gap-3">
+                                            <svg className="w-4 h-4 md:w-6 md:h-6 text-[#454b51] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
                                             </svg>
                                             <p className="text-[#454B50] text-xs md:text-lg satoshi-regular leading-[24px] md:leading-[30px]">
-                                                Dedicated support and fast-track features
+                                                {t.cardThreeList2}
                                             </p>
                                         </div>
                                     </div>

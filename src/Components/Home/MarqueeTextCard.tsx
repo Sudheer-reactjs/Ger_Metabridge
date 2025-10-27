@@ -1,18 +1,7 @@
-
-const MarqueeTextCard = () => {
-  const items = [
-    "💳 FLEXIBLE CREDIT",
-    "📊 TRANSPARENT BILLING",
-    "🛡 ️NO BUREAUCRACY",
-    "🌍 GLOBAL ACCESS",
-    "🚀 HIGH LIMITS",
-    "💳 FLEXIBLE CREDIT",
-    "📊 TRANSPARENT BILLING",
-    "🛡 ️NO BUREAUCRACY",
-    "🌍 GLOBAL ACCESS",
-    "🚀 HIGH LIMITS",
-  ];
-
+type MarqueeTextCardProps = {
+  items: string[];
+};
+const MarqueeTextCard = ({ items }: MarqueeTextCardProps) => {
   return (
     <div className="overflow-hidden w-full">
       <div className="flex animate-marquee whitespace-nowrap gap-3">

@@ -1,12 +1,15 @@
 import { motion, useInView, useAnimation } from "framer-motion";
 import { useEffect, useRef } from "react";
 import MetaEcosystem from "../../Assets/meta-ecosystem.png";
+import MetaEcosystemIt from "../../Assets/meta-ecosystem-it.png";
 import ContactButton from "../ContactButton";
 type Props = {
-  t: {
-    chooseMetabridgeTitle: string;
-    chooseMetabridgeDesc: string; 
-  };
+    t: {
+        chooseMetabridgeTitle: string;
+        chooseMetabridgeDesc: string;
+        contactUsLabel: string;
+        lang: "en" | "it";
+    };
 };
 
 const ChooseMetabridgeSection = ({ t }: Props) => {
@@ -24,6 +27,9 @@ const ChooseMetabridgeSection = ({ t }: Props) => {
         }
     }, [isInView, controls]);
 
+    // 🔹 Choose image based on language
+    const selectedImage =
+        t.lang === "it" ? MetaEcosystemIt : MetaEcosystem;
 
     return (
         <div className="w-full overflow-hidden mb-12 mb:my-24 pt-12 md:pt-24">
@@ -48,13 +54,13 @@ const ChooseMetabridgeSection = ({ t }: Props) => {
                         }}
                     >
                         <h2 className="text-[#051420] text-[28px] md:text-[40px] capitalize">
-                           {t.chooseMetabridgeTitle} 
+                            {t.chooseMetabridgeTitle}
                         </h2>
                         <p className="text-[#0B1013] text-sm md:text-lg satoshi-regular leading-[24px] md:leading-[30px] mt-4">
-                           {t.chooseMetabridgeDesc} 
+                            {t.chooseMetabridgeDesc}
                         </p>
                         <div className="flex items-center space-x-4 mt-5 md:mt-7">
-                            <ContactButton />
+                            <ContactButton label={t.contactUsLabel} />
                         </div>
                     </motion.div>
 
@@ -69,7 +75,7 @@ const ChooseMetabridgeSection = ({ t }: Props) => {
                     >
                         <img
                             className="w-full max-w-2xl m-auto"
-                            src={MetaEcosystem}
+                            src={selectedImage}
                             alt="Meta Ecosystem"
                         />
                     </motion.div>

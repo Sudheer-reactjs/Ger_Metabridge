@@ -2,12 +2,17 @@ import { motion, useInView, useAnimation } from "framer-motion";
 import { useEffect, useRef } from "react";
 import ContactButton from "./ContactButton";
 import FooterBG from "../Assets/footer-bg.png"
+import useDetectCountry from "../Hooks/useDetectCountry";
+import translations from "../translations";
 
 
 const Footer = () => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: false, amount: 0.3 });
     const controls = useAnimation();
+        const country = useDetectCountry();
+    const lang = country === "IT" ? "it" : "en";
+    const t = translations[lang];
 
     useEffect(() => {
         if (isInView) {
@@ -19,7 +24,7 @@ const Footer = () => {
             return () => clearTimeout(t);
         }
     }, [isInView, controls]);
-
+ 
     return (
         <footer className="w-full overflow-hidden">
 
@@ -47,29 +52,22 @@ const Footer = () => {
                             <div className="w-full max-w-[80%] left-[10%] h-[120px]  top-[84%] absolute bg-[#009aff] rounded-full blur-[75px]" />
                             <div className=" inline-flex flex-col justify-start items-center gap-0 w-full">
                                 <div className="self-stretch flex flex-col justify-start items-center gap-2 max-w-[913px] m-auto w-full">
-                                    <h2 className="self-stretch text-center justify-start text-[#f1f5f8] text-[32px] md:text-[55px] font-medium  leading-[42px] md:leading-[74px]">Are you ready to really scale?</h2>
-                                    <p className="self-stretch text-center justify-start text-[#c0d5df] text-sm md:text-lg font-normal  leading-[24px] md:leading-[30px]">Scale your campaigns with speed, flexibility, and trust—Metabridge gives you the freedom to grow without limits or unnecessary roadblocks.</p>
+                                    <h2 className="self-stretch text-center justify-start text-[#f1f5f8] text-[32px] md:text-[55px] font-medium  leading-[42px] md:leading-[74px]">{t.footerTitle}</h2>
+                                    <p className="self-stretch text-center justify-start text-[#c0d5df] text-sm md:text-lg font-normal  leading-[24px] md:leading-[30px]">{t.footerDescription}</p>
                                 </div>
                                 <div
                                     className="flex items-center space-x-4 justify-center md:justify-start mt-6 md:mt-10 "
                                 >
-                                    <ContactButton />
+                                    <ContactButton label={t.contactUsLabel} />
                                 </div>
                             </div>
                         </div>
-
-
-
-
-
-
-
 
                     </div>
                 </motion.div>
             </div>
             <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-14 py-3 ">
-                <p className="text-center text-[#c0d5df] text-sm  font-normal leading-[24px] md:leading-[30px]">Copyright © metabrige 2025. All Rights Reserved.</p>
+                <p className="text-center text-[#c0d5df] text-sm  font-normal leading-[24px] md:leading-[30px]">{t.footerCopyright}</p>
             </div>
 
         </footer>

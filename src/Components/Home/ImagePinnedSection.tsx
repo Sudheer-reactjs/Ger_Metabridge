@@ -9,8 +9,15 @@ import ContactButton from "../ContactButton";
 import BeforeShape from "../../Assets/before-shape.png";
 import AfterShape from "../../Assets/after-shape.png";
 
+type ImagePinnedProps = {
+    t: {
+      ImagePinnedSectionTitle:string;
+      ImagePinnedSectionDesc:string;
+      contactUsLabel:string;
+    };
+  };
 
-const ImagePinnedSection = () => {
+const ImagePinnedSection = ({ t }: ImagePinnedProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -102,15 +109,15 @@ const ImagePinnedSection = () => {
             <div className="grid grid-cols-1 items-center md:grid-cols-[_1.3fr_1fr] gap-7 md:gap-6 ">
               <div>
                 <h2 className="text-center md:text-left self-stretch justify-start text-[#fff] text-[28px] md:text-[40px] capitalize">
-                  Push your budget, not your limits
+                  {t.ImagePinnedSectionTitle}
                 </h2>
                 <p className="text-center md:text-left  self-stretch justify-start text-[#c0d5df] text-sm md:text-lg font-normal leading-[24px] md:leading-[30px]">
-                  Metabridge is built by advertisers for advertisers: flexible, fast, without unnecessary bureaucracy. It allows you to scale without ever standing still.
+                  {t.ImagePinnedSectionDesc}
                 </p>
                 <div
                   className="flex items-start space-x-4 justify-center md:justify-start mt-6 md:mt-7 "
                 >
-                  <ContactButton />
+                  <ContactButton label={t.contactUsLabel} />
                 </div>
               </div>
               <div>

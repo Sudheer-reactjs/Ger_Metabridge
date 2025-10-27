@@ -6,6 +6,7 @@ type Props = {
     heroSubTitle: string;
     heroTitle: string;
     heroDesc: string; 
+    contactUsLabel: string;
   };
 };
 
@@ -100,7 +101,7 @@ export default function VideoScrubSection({ t }: Props) {
               <p className="self-stretch text-center justify-start text-[#c0d5df] text-sm md:text-lg font-normal  leading-[24px] md:leading-[30px]">{t.heroDesc}</p>
             </div>
             <div className="flex items-center space-x-4 justify-center mt-6 md:mt-10">
-              <ContactButton />
+              <ContactButton label={t.contactUsLabel} />
             </div>
           </div>
         </div>
