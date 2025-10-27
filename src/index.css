@@ -26,9 +26,7 @@ transition: all 0.7s ease;
 .button-hover:hover .text {
   transform: translateX(24px); 
 }
-.button-hover:hover .icon {
-  transform: translateX(-100px); 
-}
+
 .button-hover:hover .hover-bg {
   transform: translatey(-98px) rotate(180deg);
   transition: transform 1s ease; 
@@ -83,6 +81,11 @@ img{
 }
  
 
+@media(min-width: 769px){
+.button-hover:hover .icon {
+  transform: translateX(-100px); 
+}
+}
 @media(max-width: 768px){
   .animate-marquee-reverse {
   animation: marquee-reverse 8s linear infinite;

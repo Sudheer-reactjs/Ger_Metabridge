@@ -6,7 +6,7 @@ type ContactButtonProps = {
 
 const ContactButton = ({ label }: ContactButtonProps) => {
     return (
-        <a href="#" data-property-1="Default" className="contact-button button-hover pl-[30px] pr-1 py-1 relative bg-black rounded-[99px] border-[1px] border-solid border-transparent inline-flex justify-center items-center gap-2.5 overflow-hidden">
+        <a href="https://form.jotform.com/nicotel/-onboarding-metabridge" target="_blank" data-property-1="Default" className="contact-button button-hover pl-[30px] pr-1 py-1 relative bg-black rounded-[99px] border-[1px] border-solid border-transparent inline-flex justify-center items-center gap-2.5 overflow-hidden md:min-w-[158px]">
             <div className="hover-bg w-[100px] h-[52px] left-[29px] top-[49px] absolute bg-[#009aff] rounded-full blur-[25px]" />
             <div className="justify-start text-white text-sm text text-light">{label}</div>
             <div className="contact-button p-[10px] bg-black/25 rounded-[99px] border-[1px] border-solid border-transparent flex justify-center items-center gap-2.5 icon ">
